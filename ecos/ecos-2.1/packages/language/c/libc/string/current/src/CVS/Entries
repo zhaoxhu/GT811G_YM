@@ -1,0 +1,23 @@
+/bsdstring.cxx/1.1.1.1.8.2/Wed Dec 19 04:29:57 2007//Tlynxd-generic-basedon-R6-21-1-17
+/memchr.cxx/1.1.1.1.8.2/Wed Dec 19 04:30:09 2007//Tlynxd-generic-basedon-R6-21-1-17
+/memcmp.cxx/1.1.1.1.8.2/Wed Dec 19 04:31:56 2007//Tlynxd-generic-basedon-R6-21-1-17
+/memmove.cxx/1.1.1.1.8.2/Wed Dec 19 04:33:32 2007//Tlynxd-generic-basedon-R6-21-1-17
+/strcat.cxx/1.1.1.1.8.2/Wed Dec 19 04:31:47 2007//Tlynxd-generic-basedon-R6-21-1-17
+/strchr.cxx/1.1.1.1.8.2/Wed Dec 19 04:30:36 2007//Tlynxd-generic-basedon-R6-21-1-17
+/strcmp.cxx/1.1.1.1.8.2/Wed Dec 19 04:32:11 2007//Tlynxd-generic-basedon-R6-21-1-17
+/strcoll.cxx/1.1.1.1.8.2/Wed Dec 19 04:29:37 2007//Tlynxd-generic-basedon-R6-21-1-17
+/strcpy.cxx/1.1.1.1.8.2/Wed Dec 19 04:31:24 2007//Tlynxd-generic-basedon-R6-21-1-17
+/strcspn.cxx/1.1.1.1.8.2/Wed Dec 19 04:30:51 2007//Tlynxd-generic-basedon-R6-21-1-17
+/strdup.cxx/1.1.1.1.8.2/Wed Dec 19 04:34:06 2007//Tlynxd-generic-basedon-R6-21-1-17
+/strlen.cxx/1.1.1.1.8.2/Wed Dec 19 04:33:47 2007//Tlynxd-generic-basedon-R6-21-1-17
+/strncat.cxx/1.1.1.1.8.2/Wed Dec 19 04:31:15 2007//Tlynxd-generic-basedon-R6-21-1-17
+/strncmp.cxx/1.1.1.1.8.2/Wed Dec 19 04:32:31 2007//Tlynxd-generic-basedon-R6-21-1-17
+/strncpy.cxx/1.1.1.1.8.2/Wed Dec 19 04:30:22 2007//Tlynxd-generic-basedon-R6-21-1-17
+/strpbrk.cxx/1.1.1.1.8.2/Wed Dec 19 04:33:16 2007//Tlynxd-generic-basedon-R6-21-1-17
+/strrchr.cxx/1.1.1.1.8.2/Wed Dec 19 04:30:43 2007//Tlynxd-generic-basedon-R6-21-1-17
+/strspn.cxx/1.1.1.1.8.2/Wed Dec 19 04:29:46 2007//Tlynxd-generic-basedon-R6-21-1-17
+/strstr.cxx/1.1.1.1.8.2/Wed Dec 19 04:31:37 2007//Tlynxd-generic-basedon-R6-21-1-17
+/strsuppt.cxx/1.1.1.1.8.2/Wed Dec 19 04:29:27 2007//Tlynxd-generic-basedon-R6-21-1-17
+/strtok.cxx/1.1.1.1.8.2/Wed Dec 19 04:32:52 2007//Tlynxd-generic-basedon-R6-21-1-17
+/strxfrm.cxx/1.1.1.1.8.2/Wed Dec 19 04:31:06 2007//Tlynxd-generic-basedon-R6-21-1-17
+D

@@ -1,0 +1,85 @@
+# File Name : iros/support/build/makefile.start
+# Date: 09/14/2002
+# Original Author: Henry Zhu
+# Desc: this makefile is shared by SW building hierachy to start
+#       main building steps. It simply takes a list of targets
+#       which are names of sub-directories under the same directory
+#       with the user of this makefile.
+
+#TARGET_LIST is a list of sub-directories defined by the user makefile
+
+NOISY ?= $(noisy)
+
+SHH := 
+AT := 
+
+ifneq ($(strip $(NOISY)),)
+SHH := 
+AT := 
+endif
+
+#CLEAN_LIST=$(patsubst %, clean-%, $(TARGET_LIST))
+ifeq ($(firstword $(TARGET_LIST)),iros)
+TEMP_CLEAN_LIST=$(wordlist 2,$(words $(TARGET_LIST)), $(TARGET_LIST))
+TEMP_CLEAN_LIST+=$(firstword $(TARGET_LIST))
+CLEAN_LIST=$(patsubst %, clean-%, $(TEMP_CLEAN_LIST))
+else
+CLEAN_LIST=$(patsubst %, clean-%, $(TARGET_LIST))
+endif
+
+THIS_OS=$(shell uname -s)
+export THIS_OS
+
+
+ifneq ($(THIS_OS), Linux)
+      $(error Not supported host os $(THIS_OS))
+endif
+
+
+do_this: $(TARGET_LIST)
+
+
+$(TARGET_LIST): force
+	$(AT) echo "-------------------------------------- ($(shell pwd)) $(basename $@)" | sed "s^\.\./^^g"; 
+	$(AT) if test -f $@/makefile ; then \
+         $(MAKE) $(MAKEOPTS) $(SHH) -C $@ ; \
+	elif test -f $@/Makefile ; then \
+         $(MAKE) $(MAKEOPTS)  $(SHH) -C $@ ; \
+    elif test -f $@/makefile.rebuild ; then \
+         $(MAKE) $(MAKEOPTS) $(SHH)  -C $@ -f makefile.rebuild ; \
+    else \
+        printf "No makefile found in %s\n" $@ ; \
+    fi 
+
+clean: $(CLEAN_LIST)
+
+$(CLEAN_LIST): force
+	$(AT) if test -f $(patsubst clean-%, %, $@)/makefile.rebuild ; then \
+		$(MAKE) $(MAKEOPTS)  -C $(patsubst clean-%, %, $@) -f makefile.rebuild clean  ; \
+    elif test -f $(patsubst clean-%, %, $@)/Makefile ; then \
+    	$(MAKE) $(MAKEOPTS) -i -C $(patsubst clean-%, %, $@) clean ; \
+	else \
+		printf "No makefile found in %s\n" $(patsubst clean-%, %, $@)  ; \
+	fi
+
+INSTALL_LIST_TMP=$(patsubst %, install-%, $(TARGET_LIST))
+install: $(INSTALL_LIST_TMP)
+$(INSTALL_LIST_TMP) : force
+	$(AT) if test -f $(patsubst install-%, %, $@)/makefile.rebuild ; then \
+		echo Nothing to do  ; \
+	else \
+		$(MAKE) $(MAKEOPTS)  -i -C $(patsubst install-%, %, $@) install ; \
+	fi
+
+force:;
+
+
+
+
+
+
+
+
+
+
+

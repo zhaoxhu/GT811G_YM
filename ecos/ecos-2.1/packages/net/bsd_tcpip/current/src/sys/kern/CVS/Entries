@@ -1,0 +1,11 @@
+/kern_subr.c/1.1.1.1.8.2/Wed Dec 19 06:00:11 2007//Tlynxd-generic-basedon-R6-21-1-17
+/kern_sysctl.c/1.1.1.1.8.2/Wed Dec 19 06:00:43 2007//Tlynxd-generic-basedon-R6-21-1-17
+/md5c.c/1.1.1.1.8.2/Wed Dec 19 06:00:54 2007//Tlynxd-generic-basedon-R6-21-1-17
+/sockio.c/1.1.1.1.8.2/Wed Dec 19 06:00:29 2007//Tlynxd-generic-basedon-R6-21-1-17
+/uipc_accf.c/1.1.1.1.8.2/Wed Dec 19 06:00:21 2007//Tlynxd-generic-basedon-R6-21-1-17
+/uipc_domain.c/1.1.1.1.8.2/Wed Dec 19 06:00:15 2007//Tlynxd-generic-basedon-R6-21-1-17
+/uipc_mbuf.c/1.1.1.1.8.2/Wed Dec 19 06:00:34 2007//Tlynxd-generic-basedon-R6-21-1-17
+/uipc_mbuf2.c/1.1.1.1.8.2/Wed Dec 19 06:00:51 2007//Tlynxd-generic-basedon-R6-21-1-17
+/uipc_socket.c/1.1.1.1.8.2/Wed Dec 19 06:00:39 2007//Tlynxd-generic-basedon-R6-21-1-17
+/uipc_socket2.c/1.1.1.1.8.2/Wed Dec 19 06:00:47 2007//Tlynxd-generic-basedon-R6-21-1-17
+D

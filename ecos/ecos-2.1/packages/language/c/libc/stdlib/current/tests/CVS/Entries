@@ -1,0 +1,17 @@
+/abs.c/1.1.1.1.8.2/Wed Dec 19 04:19:19 2007//Tlynxd-generic-basedon-R6-21-1-17
+/atoi.c/1.1.1.1.8.2/Wed Dec 19 04:18:56 2007//Tlynxd-generic-basedon-R6-21-1-17
+/atol.c/1.1.1.1.8.2/Wed Dec 19 04:18:36 2007//Tlynxd-generic-basedon-R6-21-1-17
+/bsearch.c/1.1.1.1.8.2/Wed Dec 19 04:18:32 2007//Tlynxd-generic-basedon-R6-21-1-17
+/div.c/1.1.1.1.8.2/Wed Dec 19 04:18:41 2007//Tlynxd-generic-basedon-R6-21-1-17
+/getenv.c/1.1.1.1.8.2/Wed Dec 19 04:18:24 2007//Tlynxd-generic-basedon-R6-21-1-17
+/labs.c/1.1.1.1.8.2/Wed Dec 19 04:19:14 2007//Tlynxd-generic-basedon-R6-21-1-17
+/ldiv.c/1.1.1.1.8.2/Wed Dec 19 04:19:00 2007//Tlynxd-generic-basedon-R6-21-1-17
+/qsort.c/1.1.1.1.8.2/Wed Dec 19 04:19:24 2007//Tlynxd-generic-basedon-R6-21-1-17
+/rand1.c/1.1.1.1.8.2/Wed Dec 19 04:18:52 2007//Tlynxd-generic-basedon-R6-21-1-17
+/rand2.c/1.1.1.1.8.2/Wed Dec 19 04:19:31 2007//Tlynxd-generic-basedon-R6-21-1-17
+/rand3.c/1.1.1.1.8.2/Wed Dec 19 04:19:04 2007//Tlynxd-generic-basedon-R6-21-1-17
+/rand4.c/1.1.1.1.8.2/Wed Dec 19 04:19:36 2007//Tlynxd-generic-basedon-R6-21-1-17
+/srand.c/1.1.1.1.8.2/Wed Dec 19 04:18:28 2007//Tlynxd-generic-basedon-R6-21-1-17
+/strtol.c/1.1.1.1.8.2/Wed Dec 19 04:18:47 2007//Tlynxd-generic-basedon-R6-21-1-17
+/strtoul.c/1.1.1.1.8.2/Wed Dec 19 04:19:08 2007//Tlynxd-generic-basedon-R6-21-1-17
+D

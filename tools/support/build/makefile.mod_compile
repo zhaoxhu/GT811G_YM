@@ -1,0 +1,206 @@
+# File Name: makefile.mod_compile
+# Author: Henry Zhu
+# Date: 09/14/2002
+# Modified: 10/20/2004 
+
+#ifndef BUILDID
+#BUILDID:=$(shell date +"%s")
+#endif
+OBJDIR=$(MOD_TMPHOME)
+
+SHELL = bash
+SHH := 
+AT := 
+
+
+#setup target
+ifeq ($(MOD_TARGET), library)
+TARGET=$(OBJDIR)/lib$(MOD_NAME).a
+else
+ifeq ($(MOD_TARGET), executable)
+
+else
+ifeq ($(MOD_TARGET), application)
+TARGET+=$(OBJDIR)/$(MOD_NAME).blob
+else
+	$(error MOD_TARGET must be library, executable or application)
+endif
+endif
+endif
+
+ifneq ($(IMAGES), )
+CP_IMAGES=cp_image
+TARGET+=$(CP_IMAGES)
+endif
+
+MAKEFLAGS= -j4  
+all: $(TARGET)
+
+
+#setup toolchain
+ifdef SC_LINUX
+TOOL_CHAIN :=
+else
+TOOL_CHAIN :=arm-elf-
+endif
+
+CC = $(TOOL_CHAIN)gcc
+CXX = $(TOOL_CHAIN)g++
+AS = $(TOOL_CHAIN)gcc
+AR = $(TOOL_CHAIN)ar
+LD = $(TOOL_CHAIN)g++
+OBJCOPY = $(TOOL_CHAIN)objcopy
+OBJDUMP = $(TOOL_CHAIN)objdump
+
+#setup flags
+ifdef STANDARD_MODE
+	CFLAGS = -c -Wall -O1 -fdata-sections -ffunction-sections -ffreestanding -DIROS_BUILD_ID=\"$(BUILDID)\" -DSTANDARD_MODE -D__LITTLE_ENDIAN__
+else
+	ifdef ISOLATION_MODE
+	CFLAGS = -c -Wall -O1 -fdata-sections -ffunction-sections -ffreestanding -DIROS_BUILD_ID=\"$(BUILDID)\" -DISOLATION_MODE -D__LITTLE_ENDIAN__
+else
+	CFLAGS = -c -Wall -O1 -fdata-sections -ffunction-sections -ffreestanding -DIROS_BUILD_ID=\"$(BUILDID)\" -DSTANDARD_MODE -D__LITTLE_ENDIAN__
+endif
+endif
+
+INCLUDES=
+DEFLAGS := $(CFLAGS) $(MOD_CFLAGS) $(MOD_INCLUDES) $(INCLUDES)
+CFLAGS := $(CFLAGS) -g $(MOD_CFLAGS) $(MOD_INCLUDES) $(INCLUDES)
+
+ifdef MOD_LD_LIBS
+	LD_MOD_LIBS=$(addprefix -l, $(MOD_LD_LIBS))
+endif
+
+LDFLAGS = $(LD_MOD_LIBS) $(LD_MOD_OTHERS)
+ARFLAGS = rcs
+
+ifndef APP_LOAD_START
+	APP_LOAD_START=12345
+endif
+
+ifndef BLOB_HEADER_RESERVED
+	BLOB_HEADER_RESERVED=0xffffffff
+endif
+
+
+SRC_FILES = $(CFILES) $(CPPFILES) $(SFILES) 
+SRC_FILES2=$(basename $(notdir $(SRC_FILES)))
+
+IFILE_OUT=
+ifneq ($(IFILE),)
+IFILE_O= $(OBJDIR)/$(basename $(notdir $(IFILE)))_wrap.o
+IFILE_C= $(basename $(notdir $(IFILE)))_wrap.c
+IFILE_DEPS= $(filter-out tclsh.i,$(shell sed -n 's/\%include/ /gp'  $(IFILE)))
+endif
+
+OFILES=$(addsuffix .o, $(addprefix $(OBJDIR)/, $(SRC_FILES2))) $(IFILE_O)
+
+DEPFILES := $(OFILES:%.o=%.d)
+NODEPS:=clean 
+
+vpath %.c  $(sort $(dir $(SRC_FILES)))
+vpath %.S  $(sort $(dir $(SRC_FILES)))
+vpath %.i  $(sort $(dir $(IFILE)))
+
+#setup rules
+ifeq (0, $(words $(findstring $(MAKECMDGOALS), $(NODEPS))))
+-include $(DEPFILES)
+endif
+
+$(OBJDIR)/%.o: %.c
+	$(AT) echo [Compile C] $<
+	$(CC) $(CFLAGS)   -c -o $@ $<
+
+$(OBJDIR)/%.o: %.cpp
+	$(AT) echo [Compile C++] $<
+	$(CXX) $(CFLAGS)   -c -o $@ $<
+
+$(OBJDIR)/%.o: %.S
+	$(AT) echo [Compile ASM] $<
+	$(CC) $(CFLAGS)  -c -o $@ $<
+
+$(OBJDIR)/%.d:%.c
+	 $(CC) $(DEFLAGS) -MM -MF $@ -MT $(@:%.d=%.o) $< 
+
+$(OBJDIR)/%.d:%.cpp
+	$(CC) $(DEFLAGS)  -MM -MF $@ -MT $(@:%.d=%.o) $<
+
+#sepcial treat the TCL i file
+$(IFILE_O): $(IFILE) $(IFILE_DEPS)
+	$(AT) echo [Compile TCL] $(IFILE)
+	$(AT) swig $(IFILE_FLAG) -o $(IFILE_C) $(IFILE)
+	$(AT) $(CC) $(filter-out -Wall, $(CFLAGS))  -c -o $@ $(IFILE_C) 
+
+ifneq ($(CP_IMAGES), )
+
+$(CP_IMAGES):$(IMAGES)
+	$(AT) if [ ! -d $(IMAGES_DIR) ] ; then \
+		mkdir $(IMAGES_DIR); \
+	fi;\
+	cp -f $(IMAGES) $(IMAGES_DIR) 
+
+endif
+
+
+$(OBJDIR)/$(MOD_NAME).blob: $(OBJDIR)/$(MOD_NAME).img	 
+	$(AT) echo "Generate $@ "
+	 gen_blob $< "`arm-elf-strings $(OBJDIR)/$(MOD_NAME) | grep "iROS " |head -n1`" $(BLOB_HEADER_RESERVED)  \
+	0x`arm-elf-nm $(OBJDIR)/$(MOD_NAME) | grep T\ __exception_handlers | colget 0` $@		 
+
+$(OBJDIR)/$(MOD_NAME).zblob: $(OBJDIR)/$(MOD_NAME).zimg
+	$(AT) echo "Generate $@ "
+	gen_blob $< "`arm-elf-strings $(OBJDIR)/$(MOD_NAME) | grep "iROS " |head -n1`" $(BLOB_HEADER_RESERVED)  \
+		0x`arm-elf-nm $(OBJDIR)/$(MOD_NAME) | grep T\ __exception_handlers | colget 0` $@
+
+$(OBJDIR)/$(MOD_NAME).zimg: $(OBJDIR)/$(MOD_NAME).img
+	$(AT) echo "Generate $@ "
+	$(AT) gzip -c $< > $@
+
+$(OBJDIR)/$(MOD_NAME).img: $(OBJDIR)/$(MOD_NAME)
+	$(AT) echo "Generate $@ "
+	$(AT) $(OBJCOPY) --output binary $< $@
+	$(AT) $(OBJDUMP) -D $< > $<.asm
+	$(AT) od -x -w2 -v $@ | cut -b9-20 | nldel2 > $<.dat
+	$(AT) cat $(SWHOME)/tools/support/build/coeheader $<.dat > $<.coe
+
+$(OBJDIR)/$(MOD_NAME):$(OFILES) 
+	$(AT) echo "Generate $@ "
+	$(AT) $(LD)  $(OFILES)  -o $@ $(LDFLAGS) $(MOD_LDFLAGS) 
+
+# AR_OFILES=$(OFILES) - $(MOD_OFILES)
+AR_OFILES=$(filter-out $(MOD_OFILES), $(OFILES))
+
+
+$(OBJDIR)/lib$(MOD_NAME).so:$(AR_OFILES)
+	$(AT) $(CC) -shared -o $@ $(AR_OFILES) 
+
+$(OBJDIR)/lib$(MOD_NAME).a: $(AR_OFILES) 
+	$(AT) echo "[Gen Library] $@"
+	$(AT) $(AR) $(ARFLAGS) $(MOD_ARGFLAGS) $@ $(AR_OFILES)
+
+
+# remove all .o, .d, .so, .a and executables for this module
+clean:
+	$(AT) echo "Clean $(MOD_NAME) Obj files"
+		rm -rf $(DEPFILES) $(OFILES) \
+		$(OBJDIR)/lib$(MOD_NAME).a $(OBJDIR)/lib$(MOD_NAME).so \
+		$(OBJDIR)/$(MOD_NAME).* *.mif \
+		$(OBJDIR)/$(MOD_NAME).img \
+		$(OBJDIR)/$(MOD_NAME).dat \
+		$(OBJDIR)/$(MOD_NAME).asm \
+		$(OBJDIR)/$(MOD_NAME).blob \
+		$(OBJDIR)/$(MOD_NAME).map  \
+		$(IFILE_O)  $(IFILE_C) \
+		$(CLEAN_FILES) $(IMAGES_DIR)
+
+# install
+
+INSTALL_LIST_TMP=$(patsubst %, install-%, $(INSTALL_LIST))
+#$(warning $(INSTALL_LIST_TMP))
+
+install: $(INSTALL_LIST_TMP)
+$(INSTALL_LIST_TMP) : force
+	@test -d $(INSTALL_HOME) || exit
+	install -m444 $(patsubst install-%,%,$@) $(INSTALL_HOME)/`date +%Y%m%d`-$(INSTALL_NAME_REFIX)$(patsubst install-%,%,$@)
+
+force:;

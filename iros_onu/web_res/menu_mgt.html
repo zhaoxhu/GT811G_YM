@@ -1,0 +1,66 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title></title>
+<style type="text/css">
+<!--
+	body {
+	background-color: #000000;
+	margin-left: 10px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	}
+-->
+</style>
+<link href="css/menu.css" rel="stylesheet" type="text/css">
+<script language="javascript" type="text/javascript" src="js/prototype.js"></script>
+<script language="javascript" type="text/javascript" src="js/menu.js"></script>
+<script language="javascript" type="text/javascript">
+    var page_lang = [ 
+        {
+    	    	innerHTML:
+                {
+				    in_update:"Update Firmware",
+				    in_rest:"Reset ONU"
+				}
+        },
+        {
+			innerHTML:
+            {
+				in_update:"固件升级",
+				in_rest:"重启ONU"
+			}
+        }
+    ];
+
+window.onload = function(){
+	top.g_cur_left_url = window.location.href;
+    chgLanguage();
+
+	$("page_body").style.visibility = "visible";
+	top.g_cur_main_url = "maintenance_updatefirm.html";
+	top.mainFrame.location.href = top.g_cur_main_url;
+}
+
+function chgLanguage()
+{
+	change_language(page_lang[top.get_lang_index()]);
+}
+
+</script>
+</head>
+<body style="visibility:hidden" id="page_body">
+<table border="0" cellpadding="0" cellspacing="0">
+	
+	<tr>
+	<td height="20" align="left"><a href="maintenance_updatefirm.html" target="mainFrame" class="menulink" id="in_update">Update Firmware</a></td>
+	</tr>
+	
+	<tr>
+	<td height="20" align="left"><a href="maintenance_reset.html" target="mainFrame" class="menulink" id="in_rest">Reset ONU</a></td>
+	</tr>
+</table>
+</body>
+</html>
+

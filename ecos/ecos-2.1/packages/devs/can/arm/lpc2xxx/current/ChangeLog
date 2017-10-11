@@ -1,0 +1,76 @@
+2007-08-17 Hans Rosenfeld <rosenfeld@grumpf.hope-2000.org>
+	
+	* src/can_lpc2xxx.c: The definition of "info" is missing when only
+	  one CAN channel is configured.
+	
+2007-08-17  Uwe Kindler <uwe_kindler@web.de>
+	
+	* include/can_lpc2xxx_baudrates.h: Removed all prefixed zeros from
+	  baudrate table entries (they aren't intended to be interpreted as 
+	  octal)
+	  
+	* tests/can_baudrates.c
+	  tests/can_busload.c
+	  tests/can_rx_tx.c: removed #include pkgconf/devs_can_loop.h
+	
+2007-08-02  Alexey Shusharin <mrfinch@mail.ru>
+	
+	* src/can_lpc2xxx.c: Added acknowledging call in rx interrupt
+	  (self-reception part)
+	
+2007-07-07  Alexey Shusharin <mrfinch@mail.ru>
+
+	* cdl/can_lpx2xxx.cdl: Option
+	  CYGOPT_DEVS_CAN_LPC2XXX_USE_SELF_RECEPTION added for enabling
+	  self reception requests instead of transmission requests.
+	
+	* src/can_lpc2xxx.c: Some small bugs fixed. Added support for LUT
+	  error. Support for self transmission request added. Debug output
+	  improved.
+	  
+	* src/can_accfilt_lpc2xxx.c: Added support for baudrates of 10kbaud 
+	  and 20 kbaud at clock speed of 60 MHz
+	
+2007-07-01  Uwe Kindler  <uwe_kindler@web.de>
+
+	* LPC2xxx CAN driver package created
+	* cdl/can_lpc2xxx.cdl
+	* include/can_lpc2xxx.h
+	* include/can_lpc2xxx_baudrates.h
+	* src/can_lpc2xxx.c
+	* src/can_accfilt_lpc2xxx.c
+
+//===========================================================================
+//####ECOSGPLCOPYRIGHTBEGIN####
+// -------------------------------------------
+// This file is part of eCos, the Embedded Configurable Operating System.
+// Copyright (C) 1998, 1999, 2000, 2001, 2002 Red Hat, Inc.
+//
+// eCos is free software; you can redistribute it and/or modify it under
+// the terms of the GNU General Public License as published by the Free
+// Software Foundation; either version 2 or (at your option) any later version.
+//
+// eCos is distributed in the hope that it will be useful, but WITHOUT ANY
+// WARRANTY; without even the implied warranty of MERCHANTABILITY or
+// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+// for more details.
+//
+// You should have received a copy of the GNU General Public License along
+// with eCos; if not, write to the Free Software Foundation, Inc.,
+// 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
+//
+// As a special exception, if other files instantiate templates or use macros
+// or inline functions from this file, or you compile this file and link it
+// with other works to produce a work based on this file, this file does not
+// by itself cause the resulting work to be covered by the GNU General Public
+// License. However the source code for this file must still be made available
+// in accordance with section (3) of the GNU General Public License.
+//
+// This exception does not invalidate any other reasons why a work based on
+// this file might be covered by the GNU General Public License.
+//
+// Alternative licenses for eCos may be arranged by contacting Red Hat, Inc.
+// at http://sources.redhat.com/ecos/ecos-license/
+// -------------------------------------------
+//####ECOSGPLCOPYRIGHTEND####
+//===========================================================================

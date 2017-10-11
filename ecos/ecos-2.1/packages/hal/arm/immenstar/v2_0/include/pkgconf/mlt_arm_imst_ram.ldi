@@ -1,0 +1,35 @@
+#include <cyg/infra/cyg_type.inc>
+#include <pkgconf/system.h>
+
+MEMORY
+{
+    ram0 : ORIGIN = IMST_RAM_ORIGIN, LENGTH = IMST_RAM_LEN
+    ram1  : ORIGIN = IMST_RAM_APP_START, LENGTH = IMST_RAM_APP_LEN
+}
+
+SECTIONS
+{
+    SECTIONS_BEGIN
+    SECTION_fixed_vectors (ram0, (IMST_RAM_ORIGIN + 0x20), LMA_EQ_VMA)
+    SECTION_rom_vectors (ram1, IMST_RAM_APP_START, LMA_EQ_VMA)
+    SECTION_RELOCS (ram1, ALIGN (0x1), LMA_EQ_VMA)
+    SECTION_text (ram1, ALIGN (0x4), LMA_EQ_VMA)
+    SECTION_fini (ram1, ALIGN (0x4), LMA_EQ_VMA)
+    SECTION_rodata (ram1, ALIGN (0x4), LMA_EQ_VMA)
+    SECTION_rodata1 (ram1, ALIGN (0x4), LMA_EQ_VMA)
+    SECTION_got (ram1, ALIGN (0x4), LMA_EQ_VMA)
+    SECTION_fixup (ram1, ALIGN (0x4), LMA_EQ_VMA)
+    SECTION_gcc_except_table (ram1, ALIGN (0x4), LMA_EQ_VMA)
+    SECTION_data (ram1, ALIGN (0x4), LMA_EQ_VMA)
+    SECTION_bss (ram1, ALIGN (0x4), LMA_EQ_VMA)
+    SECTIONS_END
+}
+
+
+
+
+
+
+
+
+

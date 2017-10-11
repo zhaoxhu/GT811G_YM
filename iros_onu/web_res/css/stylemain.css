@@ -1,0 +1,67 @@
+.button_style {
+    border-style: solid;
+    border-color:#000000;
+    border-width: 1px;
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 1px;
+    padding-bottom: 1px
+}
+.input_style {
+    border: 1px solid #C0C0C0;
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 1px;
+    padding-bottom: 1px
+}
+body {
+    margin: 0px;
+    font: 12px verdana, arial, ms sans serif;
+    color: #000000;
+    background-color: #ffffff
+}
+body.pop {
+    margin: 13px;
+    font: 12px verdana, arial, ms sans serif;
+    color: #000000;
+    background-color: #ffffff
+}
+td {
+    font-size: 9pt;
+    font-family: "verdana", "sans-serif", "arial"
+}
+td.hd {
+    font-weight: bold;
+    font-size: 9pt;
+    font-family: "verdana", "sans-serif", "arial";
+    color:black;
+    background-color:#efefef	
+}
+input {
+    font-size: 9pt;
+    font-family: "verdana", "sans-serif", "arial"
+}
+.menulink {
+    font-weight: bold;
+    font-size: 9pt;
+    width: 100%;
+    cursor:pointer;
+    font-family: "verdana", "sans-serif", "arial";
+    text-align: left;
+    text-decoration: none
+}
+a.dare {
+    color: #000000;
+    text-decoration: underline
+}
+a.dare:active {
+    color: #1f8cfa;
+    text-decoration: underline
+}
+a.dare:visited {
+    color: #000000
+}
+a.dare:hover {
+    color: #1f8cfa;
+    text-decoration: underline
+}

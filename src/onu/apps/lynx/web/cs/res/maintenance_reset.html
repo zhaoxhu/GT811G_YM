@@ -1,0 +1,198 @@
+<html>
+<head>
+<link rel="stylesheet" href="css/stylemain.css" type="text/css">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<script language="javascript" type="text/javascript" src="js/prototype.js"></script>
+<script language="JavaScript" type="text/javascript" src="js/cookie.js"></script>
+<script language="javascript" type="text/javascript">
+    var page_lang = [ 
+        {
+            title:"Reset ONU",
+            innerHTML:
+            {
+                in_hd:"Reset ONU",
+                in_rstonu:"Reset ONU",
+                in_rstfac:"Reset to factory default settings"
+            },
+            js_string:
+            {
+                str_resting:"Resetting the ONU.....",
+                str_sec:"s",
+                str_failed:"Reset ONU failed.",
+                str_resume:"Reset to factory default setting failed."
+            }
+        },
+        {
+             title:"重启ONU",
+             innerHTML:
+             {
+                 in_hd:"重启ONU",
+                 in_rstonu:"重启ONU",
+                 in_rstfac:"恢复默认设置并重启ONU"
+             },
+             js_string:
+             {
+                 str_resting:"正在重启ONU.....",
+                 str_sec:"秒",
+                 str_failed:"重启ONU失败.",
+                 str_resume:"恢复默认配置失败."
+              }
+        }
+    ];
+
+    var html_status = "";
+    var html_form    = "";
+    var ip_info = null;
+    var reset_time = 80;
+    var interval_reset = 0;
+    var str_resting = "Resetting the ONU.....";
+    var str_sec = "s";
+    var str_failed = "Reset ONU failed.";
+    var str_resume    = "Reset to factory default setting failed.";
+    
+    function chgLanguage()
+    {
+        try
+        {
+            var  curr_lang = page_lang[top.get_lang_index()];
+            change_language(top.g_lang);
+            change_language(curr_lang);
+
+            str_resting = curr_lang.js_string.str_resting;
+            str_sec = curr_lang.js_string.str_sec;
+            str_failed = curr_lang.js_string.str_failed;
+            str_resume    = curr_lang.js_string.str_resume;
+        } catch(E){}
+    }
+    
+    window.onload = function()
+    {
+        
+        top.g_cur_main_url = window.location.href;
+        chgLanguage();    
+        $("page_body").style.visibility = "visible";
+        
+        
+        html_status = $("td_status").innerHTML;
+        html_form    = $("td_form").innerHTML;
+        $("td_status").innerHTML = "";
+        $("td_form").style.visibility = "visible";
+        
+        var user = LoginUser("user");
+        if (user != getAdminName("user"))
+        {
+            $("reset_type_0").disabled     = true;
+            $("reset_type_1").disabled     = true;
+            $("bt_apply").disabled     = true;
+        }    
+    }
+
+    function resetONU() {
+        if ($("reset_type_0").checked == true)
+        {
+            exe_reset();
+        }
+        else
+        {
+            clearConfig();
+        }
+    }
+
+    function exe_reset()
+    {
+        var parm = "";
+
+        parm += cgi_header();
+        $("td_form").innerHTML = "";
+        $("td_status").innerHTML = html_status;
+        top.g_xmlhttp.sendRequest(top.g_xmlhttp_url_hdr + "cgi-bin/reset_onu.cgi" + parm, "", null);    
+
+        reset_time = 50;
+        str_show = str_resting;
+        interval_reset = setInterval("changeLeaveTime();", 1000);    
+    }
+    
+    function changeLeaveTime()
+    { 
+        if (reset_time-- > 0)
+        {
+            $("txt_step").innerHTML = str_resting + reset_time + str_sec;
+        }
+        else
+        {
+            clearInterval(interval_reset);
+            if (top.g_modify_flg == 1 && ip_info != null && !ip_info.ip_flg)
+            {
+                top.g_modify_flg = 0;
+                top.g_xmlhttp_url_hdr = top.g_modify_url_addr;
+                top.g_modify_url_addr = null;
+                parent.window.location.href = top.g_xmlhttp_url_hdr;
+            } else {
+                $("td_form").innerHTML = html_form;
+                $("td_status").innerHTML = "";
+            }
+        }
+    }
+    
+    function clearConfig()
+    {
+        var parm = "";
+        parm += cgi_header();
+
+        top.g_xmlhttp.sendRequest(top.g_xmlhttp_url_hdr + "cgi-bin/config_reset.cgi" + parm, "", null)
+        $("td_form").innerHTML = "";
+        $("td_status").innerHTML = html_status;
+        reset_time = 50;
+        interval_reset = setInterval("changeLeaveTime();", 1000);
+    }
+
+</script>
+<title>Reset ONU</title></head>
+<body style="visibility:hidden" id="page_body">
+    <blockquote>
+        <table width="470" border="0">
+            <tr>
+                <td><B id="in_hd">Reset ONU</B></td>
+                <td align="right" id="td_time"></td>
+            </tr>
+        </table>
+        <table width="470" height="100" border="1" cellpadding="0" cellspacing="0" bordercolor="#EAEAEA">
+            <tr>
+                <td align="center">
+                    <table width="100%" border="0">
+                        <tr>
+                            <td align="center" id="td_status">
+                                <table border="0">
+                                    <tr>
+                                        <td align="right"><img src="img/animated_loading.gif" width="32" height="32" id="burn_img"></td>
+                                        <td><strong id="txt_step">Loading.....</strong></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td id="td_form" style="visibility:hidden">
+                                <table border="0">
+                                    <tr>
+                                        <td align="center"><input id="reset_type_0" name="reset_type" type="radio" value="0" checked></td>
+                                        <td id="in_rstonu"> Reset ONU </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center"><input id="reset_type_1" type="radio" name="reset_type" value="1"></td>
+                                        <td id="in_rstfac"> Reset to factory default setting</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" align="left"><input name="bt_apply" type="button" class="button_style" id="bt_apply" onClick="resetONU();" value="Apply">
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </blockquote>
+</body>
+</html>
+

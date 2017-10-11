@@ -1,0 +1,348 @@
+﻿<html>
+<head>
+<link rel="stylesheet" href="css/stylemain.css" type="text/css">	
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<script language="javascript" type="text/javascript" src="js/prototype.js"></script>
+<script language="JavaScript" type="text/javascript" src="js/cookie.js"></script>
+
+<script language="javascript" type="text/javascript" >
+	var page_lang = [ 
+        {
+            title:"Update Firmware",
+			innerHTML:
+			{
+			    in_hd:"Update Firmware",
+			    td_intro:"<li>Obtain an updated firmware image file from your ISP.</li><li>Enter the path to the image file location in the box below or click &quot;Browse&quot; to locate the image file.</li><li>Click &quot;Update Firmware&quot; once to upload the new image file.</li>",
+					in_note:"<b>NOTE:&nbsp;</b>The update process takes about 5 minutes to complete, and don't refresh your page while upload,after uploaded your ONU will reboot.",
+					txt_step:"Loading....."
+			},
+			js_string:
+			{
+			    str_other_run:"Another file transfer process in running.",
+			    str_loading:"Loading.....",
+			    str_uploading:"Uploading firmware image.....",
+					str_verify:"Verifying firmware image.....",
+					str_image_err:"Firmware image is invalid.",
+					str_upload_ok:"Upload image successfully.....",
+					str_verify_ok:"Firmware image is ok.",
+					str_reseting:"Reseting the ONU.....",
+					str_reset_failed:"Reset ONU failed, please reset manual.",
+					str_chk_srv:"Checking firmware version.....",
+					str_update_ok:"Update successfully",
+					str_update_fail:"Update failed",
+					str_timeout:"timeout",
+					str_firm_ver:"Firmware version",
+					str_setp:"STEP ",
+					str_sec:"s",
+					str_start_verify:"Start to verify image, please wait....."
+			}
+        },
+        {
+            title:"固件升级",
+			innerHTML:
+			{
+			    in_hd:"固件升级",
+			    td_intro:"<li>从你的ISP获取一个最新版本的固件文件.</li><li>选择正确的固件文件的路径.</li><li>点击&quot;固件升级&quot;按钮开始升级.</li>",
+			    in_note:"<b>注意:&nbsp;</b>整个升级过程大约需要5分钟,升级过程请不要刷新页面,升级完成后ONU将自动重启.",
+				  txt_step:"正在加载....."
+
+			},
+			js_string:
+			{
+			    str_other_run:"另一个升级进程正在运行",
+			    str_setp:"步骤 ",
+					str_loading:"正在加载.....",
+					str_uploading:"正在上传固件文件.....",
+					str_verify:"正在校验固件文件.....",
+					str_image_err:"固件文件镜像错误.",
+					str_upload_ok:"上传完成.....",
+					str_verify_ok:"固件文件验证通过.",
+					str_reseting:"正在重启ONU.....",
+					str_reset_failed:"重启ONU失败, 请手动重启ONU.",
+					str_chk_srv:"检查升级后的固件版本",
+					str_update_ok:"固件升级成功",
+					str_update_fail:"固件升级失败",
+					str_timeout:"超时",
+					str_firm_ver:"固件版本",
+					str_sec:"秒",
+					str_start_verify:"开始校验固件文件，请等待....."
+			}
+        }
+    ];
+	var interval_total = 0;
+	var interval_reset = 0;
+	var times_total = 1;
+	var html_setp = "";
+	var reset_time = 120;
+	var update_init = false;
+	var check_time	= 20;
+	var str_other_run 	= "Another file transfer process in running.";
+	var str_ip_chg = "The IP address had changed, you must reset the ONU.";
+	var str_time= "Time";
+	var str_sec= "s";
+	var str_setp= "";
+	var str_loading= "Loading.....";
+	var str_uploading= "Uploading firmware image.....";
+	var str_verify= "Verifying firmware image.....";
+	var str_image_err= "Firmware image is invalid.";
+	var str_upload_ok = "Upload ok.....";
+	var str_verify_ok= "Firmware image verify ok....";
+	var str_reseting= "Reseting the ONU.....";
+	var str_reset_failed= "Reset ONU failed, please reset manual.";
+	var str_chk_srv= "Checking server status.....";
+	var str_update_ok= "Update Successfully";
+	var str_update_fail = "Update failed";
+	var str_firm_ver= "Firmware version";
+	var str_show = "";
+	var str_status = "";
+	var html_status = "";
+	var dl_type  = 0;
+	var str_start_verify = "";
+	
+	function chgLanguage()
+	{
+		try {
+			change_language(top.g_lang);
+		  change_language(page_lang[top.get_lang_index()]);
+		  
+			str_other_run = page_lang[top.get_lang_index()].js_string.str_other_run;
+			str_time= page_lang[top.get_lang_index()].js_string.str_time;
+			str_sec= page_lang[top.get_lang_index()].js_string.str_sec;
+			str_setp= page_lang[top.get_lang_index()].js_string.str_setp;
+			str_loading= page_lang[top.get_lang_index()].js_string.str_loading;
+			str_uploading= page_lang[top.get_lang_index()].js_string.str_uploading;
+			str_verify= page_lang[top.get_lang_index()].js_string.str_verify;
+			str_image_err= page_lang[top.get_lang_index()].js_string.str_image_err;
+			str_upload_ok= page_lang[top.get_lang_index()].js_string.str_upload_ok;
+			str_verify_ok= page_lang[top.get_lang_index()].js_string.str_verify_ok;
+			str_reseting= page_lang[top.get_lang_index()].js_string.str_reseting;
+			str_reset_failed= page_lang[top.get_lang_index()].js_string.str_reset_failed;
+			str_chk_srv= page_lang[top.get_lang_index()].js_string.str_chk_srv;
+			str_update_ok= page_lang[top.get_lang_index()].js_string.str_update_ok;
+			str_firm_ver= page_lang[top.get_lang_index()].js_string.str_firm_ver;
+			str_update_fail = page_lang[top.get_lang_index()].js_string.str_update_fail;
+			str_start_verify = page_lang[top.get_lang_index()].js_string.str_start_verify;
+		} catch(E){}
+	}
+
+window.onload = function()
+{
+	top.g_cur_main_url = window.location.href;
+	chgLanguage();
+	$("page_body").style.visibility = "visible";
+	html_status = $("td_step").innerHTML;
+	$("td_step").innerHTML = "";
+
+	showIFrame();
+}
+
+function init(ipaddr)
+{
+	if (ipaddr != null && ipaddr.file_flag == 2)
+	{
+		$("txt_step").innerHTML = "<b><font color=\"red\">" + str_other_run + "</font></b>";
+		alert(str_other_run);
+		return;
+	}
+	showIFrame();
+}
+
+function showIFrame()
+{
+	if (html_setp == "" && $("td_step").innerHTML != "") {
+		html_setp = $("td_step").innerHTML;
+	}
+	$("td_step").innerHTML = "";
+	$("step_title").innerHTML = str_setp + "1";
+	$("upload_iframe").height = 40;
+	$("wfs_upload_iframe").height = 40;
+	$("td_time").innerHTML = "";
+}
+
+function wait_download(d_type)
+{
+      $("td_step").innerHTML = html_status;
+	
+      str_show  = str_uploading;
+	str_status = str_start_verify;
+	reset_time = 45;
+
+	$("td_upload").style.visibility = "hidden";
+	$("td_upload_wfs").style.visibility = "hidden";
+	
+	if(d_type == 1 ){
+		reset_time = 155;
+	}
+	else if(d_type == 2 ) {
+		reset_time = 170;
+      }
+	
+      $("step_title").innerHTML = str_setp + "2";
+	dl_type = d_type;
+
+	interval_reset = setInterval("changeDownloadLeaveTime();", 1000);
+}
+
+function verify_image()
+{    
+        $("step_title").innerHTML = str_setp + "3";
+		
+	var parm = "";
+	parm += cgi_header();
+	
+	top.g_xmlhttp.sendRequest(top.g_xmlhttp_url_hdr + "cgi-bin/img_verify.cgi" + parm, "", verifyImageResult);
+   
+}
+
+
+function verifyImageResult(s, web_server_status)
+{
+
+	
+	if ( check_web_status( web_server_status ) == -1 )
+	{
+		return;
+	}
+
+	
+	var ret = evalJSON(s);
+	
+	if (ret == 0)
+	{
+
+		$("txt_step").innerHTML = str_image_err + "--" + str_update_fail;
+		alert(str_image_err + "--" + str_update_fail );
+		$("step_title").innerHTML = str_setp + "3" + str_image_err + "--" + str_update_fail;
+		$("td_step").innerHTML = "";	
+	}
+	else
+	{
+	      if(dl_type == 0 || dl_type == 2 ) {
+		      $("txt_step").innerHTML = str_verify_ok;
+			
+	      	}
+		else 
+		{
+		      $("txt_step").innerHTML = str_update_ok;
+	            $("step_title").innerHTML = str_setp + "3" + str_update_ok;
+			$("td_step").innerHTML = "";	
+		}
+
+		if(ret == 2) {
+			wait_reset();
+	      }
+	
+	}
+	
+
+}
+
+function wait_reset()
+{
+      var parm = "";
+	parm += cgi_header();
+	top.g_xmlhttp.sendRequest(top.g_xmlhttp_url_hdr + "cgi-bin/reset_onu.cgi" + parm, "", null);	
+	
+      $("td_step").innerHTML = html_status;
+      str_show  = str_reseting;
+	str_status = str_update_ok;
+	reset_time = 60;
+	$("step_title").innerHTML = str_setp + "4";
+	interval_reset = setInterval("changeResetLeaveTime();", 1000);
+	
+}
+
+
+
+function changeDownloadLeaveTime()
+{ 
+	if (reset_time-- > 0)
+	{
+		$("txt_step").innerHTML = str_show + reset_time + str_sec;
+	}
+	else
+	{
+		clearInterval(interval_reset);
+		$("txt_step").innerHTML = str_status;
+             verify_image();
+	} 
+}
+
+
+function changeResetLeaveTime()
+{ 
+	if (reset_time-- > 0)
+	{
+		$("txt_step").innerHTML = str_show + reset_time + str_sec;
+	}
+	else
+	{
+		clearInterval(interval_reset);
+		$("txt_step").innerHTML = str_status;
+             $("step_title").innerHTML = str_setp + "4" + str_status;
+		$("td_step").innerHTML = "";	 
+	}
+}
+
+
+</script>
+<title>Update Firmware</title></head>
+<body style="visibility:hidden" id="page_body">
+<blockquote>
+<table width="580" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td><b id="in_hd">Update Firmware</b></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>
+<ol id="td_intro">
+<li>Obtain an updated firmware image file from your ISP.</li>
+<li>Enter the path to the image file location in the box below or click &quot;Browse&quot; to locate the image file.</li>
+<li>Click &quot;Update Firmware&quot; once to upload the new image file.</li>
+</ol> 	  
+</td>
+</tr>
+<tr>
+<td id="in_note">
+<b>NOTE:&nbsp;</b>The update process takes about 5 minutes to complete, and don't refresh your page while upload,after uploaded your ONU will reboot.</td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td><table width="470" border="0">
+<tr>
+<td><strong id="step_title">Loading</strong></td>
+<td align="right" id="td_time"></td>
+</tr>
+</table>
+<table width="570" height="100" border="1" cellpadding="0" cellspacing="0" bordercolor="#EAEAEA">
+<tr>
+<td align="center"><table width="100%" border="0">
+<tr>
+<td align="center" id="td_upload"><iframe id="upload_iframe" src="maintenance_update_wlb.html" frameborder="0" width="570" height="0" scrolling="no"></iframe></td>
+</tr>
+<tr>
+<td align="center" id="td_upload_wfs"><iframe id="wfs_upload_iframe" src="maintenance_update_wfs.html" frameborder="0" width="570" height="0" scrolling="no"></iframe></td>
+</tr>
+<tr>
+<td align="center" id="td_step"><table border="0">
+<tr>
+<td align="right"><img src="img/animated_loading.gif" width="32" height="32" id="burn_img"></td>
+<td><strong id="txt_step">Loading.....</strong></td>
+</tr>
+</table></td>
+</tr>
+</table></td>
+</tr>
+</table></td>
+</tr>
+</table>
+</blockquote>
+</body>
+</html>
+

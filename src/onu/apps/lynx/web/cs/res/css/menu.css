@@ -1,0 +1,17 @@
+.menulink {
+    font-weight: bold;
+    font-size: 9pt;
+    cursor:pointer;
+    font-family: "verdana", "sans-serif", "arial";
+    text-align: left;
+    text-decoration: none;
+    color: white
+}
+.menulink:hover {
+    color: white;
+    background-color: #1f8cfa
+}
+.menulink:active {
+    color: #1f8cfa;
+    background-color: black
+}

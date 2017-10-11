@@ -1,0 +1,117 @@
+﻿<html>
+<head>
+<link rel="stylesheet" href="css/stylemain.css" type="text/css">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<script language="javascript" type="text/javascript" src="js/prototype.js"></script>
+<script language="JavaScript" type="text/javascript" src="js/cookie.js"></script>
+
+<script language="javascript" type="text/javascript">
+	var page_lang = [ 
+        {
+            title:"Upload Firmware Image",
+			innerHTML:
+			{
+			    in_filename_wfs:"JFFS2 Image(.wfs):&nbsp;"
+			},
+			js_string:
+			{
+			    str_wrong_file:"Wrong file type!"
+			},
+			value:
+			{
+			    bt_update_wfs:"Update Firmware"
+			}
+        },
+        {
+            title:"上传固件升级文件",
+			innerHTML:
+			{
+			    in_filename_wfs:"JFFS2 固件文件(.wfs):&nbsp;"
+			},
+			js_string:
+			{
+			    str_wrong_file:"文件类型错误!"
+			},
+			value:
+			{
+			    bt_update_wfs:"固件升级"
+			}
+        }
+    ];
+
+var pre_load_img = null;
+var uploading =  0;
+var str_wrong_file = "";
+window.onload = function()
+{	
+	change_language( top.g_lang);
+  change_language(page_lang[top.get_lang_index()]);
+  str_wrong_file = page_lang[top.get_lang_index()].js_string.str_wrong_file;
+	
+	$("page_body").style.visibility = "visible";
+	
+	try {
+		$("bt_update_wfs").disabled = true;
+	} catch(e){alert(e);}
+	
+	if ( LoginUser("user") != getAdminName("user"))
+	{
+		$("bt_update_wfs").disabled = true;
+		$("firmware_file_wfs").disabled = true;
+	}
+
+}
+function  chgStatus()
+{
+	if ($("firmware_file_wfs").value == "")
+	{
+		$("bt_update_wfs").disabled = true;
+		return;
+	}
+	else
+	{
+		$("bt_update_wfs").disabled = false;
+	}
+}
+function upload() { 
+	if ($("firmware_file_wfs").value == "")
+	{
+		$("bt_update_wfs").disabled = true;
+		return;
+	}
+	
+	var wfs_str= $("firmware_file_wfs").value;
+  if(wfs_str.indexOf(".wfs") < 0)
+  {
+  	alert(str_wrong_file);
+  	return;
+  }
+
+	$("bt_update_wfs").disabled = true;
+
+	parent.wait_download(1);
+	$("page_body").style.visibility = "hidden";
+
+	setTimeout("$(\"form_update_wfs\").submit()", 1000);
+
+}
+
+
+</script>
+
+<title>Upload Firmware Image</title>
+</head>
+<body style="visibility:hidden" id="page_body">
+<form action='/cgi-bin/get_jffs2_image.cgi' method='post' enctype='multipart/form-data' name="form_update_wfs" id="form_update_wfs">
+<table width="100%" border="0" cellpadding="3" cellspacing="2">
+<tr>
+<td  id="in_filename_wfs" width="45%">Firmware File Name:&nbsp;</td>
+<td><input name="firmware_file_wfs" type="file" id="firmware_file_wfs" size="30" onChange="chgStatus();"></td>
+<td  id="up_status_wfs"><input name="bt_update_wfs" type="button" class="button_style" id="bt_update_wfs"  enctype='multipart/form-data' onClick="upload();" value="Update Firmware"></td>
+</tr>
+</table>
+</form>
+</body>
+</html>
+

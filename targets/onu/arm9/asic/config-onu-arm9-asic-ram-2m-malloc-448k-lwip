@@ -1,0 +1,452 @@
+cdl_savefile_version 1;
+cdl_savefile_command cdl_savefile_version {};
+cdl_savefile_command cdl_savefile_command {};
+cdl_savefile_command cdl_configuration { description hardware template package };
+cdl_savefile_command cdl_package { value_source user_value wizard_value inferred_value };
+cdl_savefile_command cdl_component { value_source user_value wizard_value inferred_value };
+cdl_savefile_command cdl_option { value_source user_value wizard_value inferred_value };
+cdl_savefile_command cdl_interface { value_source user_value wizard_value inferred_value };
+
+cdl_configuration eCos {
+    description "" ;
+    hardware    immenstar ;
+    template    posix ;
+    package     -hardware CYGPKG_HAL_ARM_ARM9 current ;
+    package     CYGPKG_IO current ;
+    package     CYGPKG_INFRA current ;
+    package     CYGPKG_KERNEL current ;
+    package     CYGPKG_MEMALLOC current ;
+    package     CYGPKG_ERROR current ;
+    package     CYGPKG_ISOINFRA current ;
+    package     CYGPKG_POSIX current ;
+    package     CYGPKG_IO_FILEIO current ;
+    package     CYGPKG_LIBC current ;
+    package     CYGPKG_LIBC_SETJMP current ;
+    package     CYGPKG_LIBC_STRING current ;
+    package     CYGPKG_LIBC_STARTUP current ;
+    package     CYGPKG_LIBC_I18N current ;
+    package     CYGPKG_LIBC_STDIO current ;
+    package     CYGPKG_LIBC_STDLIB current ;
+    package     CYGPKG_LIBC_TIME current ;
+    package     CYGPKG_IO_WALLCLOCK current;
+    package     CYGPKG_LIBM current;
+#    package     CYGPKG_NET current ;
+    package     CYGPKG_NET_LWIP current ;
+    package     CYGPKG_IO_ETH_DRIVERS current;
+    package     CYGPKG_ATHTTPD  current;
+    package     CYGPKG_CRC current ;
+    package     CYGPKG_CPULOAD current;
+    package     CYGPKG_FS_RAM current ;
+    package     CYGPKG_FS_JFFS2 current;
+    package     CYGPKG_IO_FLASH current;
+    package     CYGPKG_COMPRESS_ZLIB current;
+    package     CYGPKG_LINUX_COMPAT current;
+    package     CYGPKG_DEVS_FLASH_INTEL_28FXXX current;
+};
+
+
+cdl_option CYGOPT_FS_JFFS2_DEBUG {
+    user_value 0
+}
+cdl_option CYGOPT_FS_JFFS2_COMPRESS {
+    user_value 0
+}
+#Sharp 8MB flash
+cdl_option CYGHWR_DEVS_FLASH_SHARP_LH28F640BFHE {
+    user_value 1
+}
+#Intel 4MB flash
+cdl_option CYGHWR_DEVS_FLASH_INTEL_28F320C3 {
+    user_value 1
+}
+#All flash
+cdl_option CYGHWR_DEVS_FLASH_SUPPORT {
+    user_value 1
+}
+cdl_option CYGNUM_DEVS_FLASH_INTEL_28FXXX_TIMEOUT {
+    user_value 1000000000
+}
+cdl_option CYGPKG_IO_FILEIO_DEVFS_SUPPORT {
+    user_value 1
+};
+cdl_option CYGSEM_FILEIO_INFO_DISK_USAGE {
+    user_value 1
+};
+cdl_component CYGPKG_IO_FLASH_BLOCK_DEVICE {
+    user_value 1
+};
+cdl_option CYGNUM_IO_FLASH_BLOCK_OFFSET_1 {
+    user_value 0x0
+}
+cdl_option CYGNUM_IO_FLASH_BLOCK_LENGTH_1 {
+    user_value 0x100000
+}
+cdl_option CYGNUM_IO_FLASH_TEST_OFFSET {
+    user_value 0x0
+}
+cdl_option CYGNUM_IO_FLASH_TEST_LENGTH {
+    user_value 0x10000
+}
+cdl_option CYGPKG_IO_FLASH_CFLAGS_ADD {
+    user_value "-marm"
+}
+cdl_option CYGPKG_IO_FLASH_CFLAGS_REMOVE {
+    user_value "-mthumb"
+}
+
+
+cdl_component BUILD_ROM_APP {
+     user_value 0
+};
+
+
+cdl_option CYGBLD_GLOBAL_EXTRA_CFLAGS {
+#   user_value "-fno-inline"
+    user_value "-O1"
+};
+
+cdl_component CYG_HAL_STARTUP {
+    user_value RAM
+};
+
+cdl_component CYGBLD_GLOBAL_COMMAND_PREFIX {
+    user_value arm-elf
+};
+
+
+cdl_option CYGPKG_HAL_ARM_ARM9_ARM926EJ {
+    user_value 1
+};
+
+cdl_component IMST_USE_CACHE {
+	user_value 1
+};
+
+cdl_component CYGSEM_HAL_ENABLE_DCACHE_ON_STARTUP {
+	user_value 0
+};
+
+cdl_component CYGSEM_HAL_ENABLE_ICACHE_ON_STARTUP {
+	user_value 0
+};
+
+cdl_component CYG_HAL_ARM_IMST_PLAT {
+  user_value LYNX
+};
+
+
+cdl_component CYG_HAL_ARM_IMST {
+  user_value ONU_A
+};
+
+
+cdl_component CYG_HAL_ARM_ENDIAN {
+    user_value LITTLE_ENDIAN
+};
+
+# set to 0 if we don't want support thumb
+cdl_option CYGHWR_THUMB {
+    user_value 1
+};
+
+# turn to 1 if we want support thumb-interwork
+cdl_option CYGBLD_ARM_ENABLE_THUMB_INTERWORK {
+    user_value 1
+};
+
+cdl_component BUILD_IROSBOOT {
+    user_value 0
+};
+
+# 1 for gdb stub and virtual table support
+cdl_option BUILD_IROS_VT {
+    user_value 1
+};
+
+cdl_option BUILD_IROS_GDB_STUB {
+    user_value 0
+};
+
+# don't change this. it is not active if BUILD_IROS_GDB_STUB not set
+cdl_option CYGDBG_HAL_DEBUG_GDB_INCLUDE_STUBS {
+    inferred_value 0
+};
+
+
+# following parameters are used to describe memory layout
+
+cdl_option IMST_ROM_ORIGIN {
+    user_value 0x30030000
+};
+cdl_option IMST_ROM_LEN {
+    user_value 0x40000
+};
+
+cdl_option IMST_RAM_ORIGIN {
+    user_value 0x0
+};
+
+# RAM length for Loader
+#cdl_option IMST_MIN_RAM_SIZE {
+#    user_value 0x20000
+#};
+
+# RAM length for APP
+cdl_option IMST_RAM_LEN {
+    user_value 0x10000
+};
+
+cdl_option IMST_RAM_EXT_START {
+    user_value 0xe0000
+};
+
+cdl_option IMST_RAM_EXT_LEN {
+    user_value 0x120000
+};
+
+# application start location (not including fixed_vectors)
+cdl_option IMST_RAM_APP_START {
+    user_value 0x20000
+};
+
+cdl_option IMST_RAM_APP_LEN {
+    user_value 0x1e0000
+};
+
+
+cdl_option CYGSEM_HAL_USE_ROM_MONITOR {
+    user_value 0 Generic
+};
+cdl_option CYGSEM_HAL_VIRTUAL_VECTOR_CLAIM_COMMS {
+    user_value 1
+};
+cdl_component CYGDBG_HAL_DIAG_TO_DEBUG_CHAN {
+    user_value 0
+};
+
+
+cdl_component CYG_HAL_UART {
+    user_value IMST
+};
+
+cdl_option IMST_NUM_OF_UARTS {
+    user_value 1
+};
+
+# baud rate
+cdl_option CYGNUM_HAL_VIRTUAL_VECTOR_CONSOLE_CHANNEL_BAUD {
+#    user_value 38400
+    user_value 115200
+};
+
+cdl_option CYGNUM_HAL_VIRTUAL_VECTOR_DEBUG_CHANNEL_BAUD {
+#    user_value 38400
+    user_value 115200
+};
+
+cdl_option CYGDBG_HAL_DEBUG_GDB_CTRLC_SUPPORT {
+	   user_value 0
+};
+
+cdl_component CYGSEM_KERNEL_SCHED_BITMAP {
+    user_value 0
+};
+
+
+cdl_option CYGNUM_MEMALLOC_FALLBACK_MALLOC_POOL_SIZE {
+	user_value 0x78000
+};
+
+cdl_option CYGNUM_LIBC_MAIN_DEFAULT_STACK_SIZE {
+    user_value 8192
+};
+
+cdl_option CYGNUM_LIBC_MAIN_THREAD_PRIORITY {
+    user_value 30
+};
+
+cdl_option CYGPKG_LWIP_ETH {
+#   default_value 0
+	user_value 1
+};
+
+cdl_component CYGPKG_LWIP_DHCP  {
+    user_value 1
+};
+
+cdl_component CYGDBG_LWIP_DEBUG {
+    user_value 0
+};
+
+cdl_option CYGOPT_LWIP_DHCP_MANAGEMENT {
+    user_value 0
+};
+
+cdl_option CYGOPT_LWIP_DHCP_DOES_ARP_CHECK {
+    user_value 0
+};
+
+
+#-----------------------------------------
+cdl_option CYGNUM_NET_ATHTTPD_THREADOPT_PRIORITY {
+    user_value 16
+};
+
+cdl_option CYGNUM_ATHTTPD_SERVER_BUFFER_SIZE {
+    user_value 4096
+};
+
+cdl_option CYGNUM_NET_ATHTTPD_THREADOPT_STACKSIZE {
+	user_value 8192
+};
+
+cdl_option CYGOPT_NET_ATHTTPD_DEBUG_LEVEL {
+	user_value 0
+};
+
+cdl_option CYGNUM_ATHTTPD_SERVER_MAX_POST {
+	user_value 1000000
+};
+
+cdl_option CYGOPT_NET_ATHTTPD_USE_AUTH {
+	user_value 1
+};
+
+cdl_option CYGOPT_NET_ATHTTPD_CLOSE_CHUNKED_CONNECTIONS {
+   	user_value 0
+};
+
+
+
+#------------------------------------------
+
+
+cdl_option CYGIMP_KERNEL_SCHED_SORTED_QUEUES {
+    inferred_value 1
+};
+
+cdl_option CYGSEM_KERNEL_SCHED_TIMESLICE_ENABLE {
+    inferred_value 1
+};
+
+cdl_component CYGSEM_KERNEL_SCHED_ASR_SUPPORT {
+    inferred_value 1
+};
+
+cdl_option CYGSEM_KERNEL_SCHED_ASR_GLOBAL {
+    inferred_value 1
+};
+
+cdl_option CYGBLD_ISO_ERRNO_CODES_HEADER {
+    inferred_value 1 <cyg/error/codes.h>
+};
+
+cdl_option CYGBLD_ISO_ERRNO_HEADER {
+    inferred_value 1 <cyg/error/errno.h>
+};
+
+cdl_option CYGBLD_ISO_STRERROR_HEADER {
+    inferred_value 1 <cyg/error/strerror.h>
+};
+
+cdl_option CYGBLD_ISO_STRTOK_R_HEADER {
+    inferred_value 1 <cyg/libc/string/string.h>
+};
+
+cdl_option CYGBLD_ISO_STRING_LOCALE_FUNCS_HEADER {
+    inferred_value 1 <cyg/libc/string/string.h>
+};
+
+cdl_option CYGBLD_ISO_STRING_MEMFUNCS_HEADER {
+    inferred_value 1 <cyg/libc/string/string.h>
+};
+
+cdl_option CYGBLD_ISO_STRING_STRFUNCS_HEADER {
+    inferred_value 1 <cyg/libc/string/string.h>
+};
+
+cdl_option CYGBLD_ISO_POSIX_TIMER_TYPES_HEADER {
+    inferred_value 1 <cyg/posix/time.h>
+};
+
+cdl_option CYGBLD_ISO_POSIX_TIMERS_HEADER {
+    inferred_value 1 <cyg/posix/time.h>
+};
+
+cdl_option CYGBLD_ISO_SIGNAL_NUMBERS_HEADER {
+    inferred_value 1 <cyg/posix/signal.h>
+};
+
+cdl_option CYGBLD_ISO_SIGNAL_IMPL_HEADER {
+    inferred_value 1 <cyg/posix/signal.h>
+};
+
+cdl_option CYGBLD_ISO_SETJMP_HEADER {
+    inferred_value 1 <cyg/libc/setjmp/setjmp.h>
+};
+
+cdl_option CYGBLD_ISO_DIRENT_HEADER {
+    inferred_value 1 <cyg/fileio/dirent.h>
+};
+
+cdl_option CYGBLD_ISO_PTHREADTYPES_HEADER {
+    inferred_value 1 <cyg/posix/types.h>
+};
+
+cdl_option CYGBLD_ISO_UTSNAME_HEADER {
+    inferred_value 1 <cyg/posix/utsname.h>
+};
+
+cdl_option CYGBLD_ISO_SEMAPHORES_HEADER {
+    inferred_value 1 <cyg/posix/semaphore.h>
+};
+
+cdl_option CYGBLD_ISO_PTHREAD_IMPL_HEADER {
+    inferred_value 1 <cyg/posix/pthread.h>
+};
+
+cdl_option CYGBLD_ISO_POSIX_LIMITS_HEADER {
+    inferred_value 1 <cyg/posix/limits.h>
+};
+
+cdl_option CYGBLD_ISO_SIGSETJMP_HEADER {
+    inferred_value 1 <cyg/posix/sigsetjmp.h>
+};
+
+cdl_option CYGBLD_ISO_OPEN_MAX_HEADER {
+    inferred_value 1 <cyg/fileio/limits.h>
+};
+
+cdl_option CYGBLD_ISO_PMUTEXTYPES_HEADER {
+    inferred_value 1 <cyg/posix/muttypes.h>
+};
+
+cdl_option CYGBLD_ISO_STRING_BSD_FUNCS_HEADER {
+    inferred_value 1 <cyg/libc/string/bsdstring.h>
+};
+
+cdl_option CYGBLD_ISO_POSIX_CLOCK_TYPES_HEADER {
+    inferred_value 1 <cyg/posix/time.h>
+};
+
+cdl_option CYGBLD_ISO_POSIX_CLOCKS_HEADER {
+    inferred_value 1 <cyg/posix/time.h>
+};
+
+cdl_option CYGBLD_ISO_PTHREAD_MUTEX_HEADER {
+    inferred_value 1 <cyg/posix/mutex.h>
+};
+
+cdl_option CYGBLD_ISO_NAME_MAX_HEADER {
+    inferred_value 1 <cyg/fileio/limits.h>
+};
+
+cdl_option CYGFUN_LIBC_STRING_BSD_FUNCS {
+    inferred_value 1
+};
+
+cdl_option CYGNUM_POSIX_MAIN_DEFAULT_PRIORITY {
+    # posix priority map to ecos 30
+    user_value 1
+};
+

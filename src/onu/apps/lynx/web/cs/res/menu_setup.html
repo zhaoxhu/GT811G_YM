@@ -1,0 +1,93 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>MENU_SYSTEM</title>
+<style type="text/css">
+<!--
+	body {
+	background-color: #000000;
+	margin-left: 10px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	}
+	.my_menulink {
+	font-weight: bold;
+	font-size: 9pt;
+	cursor:text;
+	font-family: "verdana", "sans-serif", "arial";
+	text-align: left;
+	text-decoration: none;
+	color: #666666
+	}
+-->
+</style>
+
+<link href="css/menu.css" rel="stylesheet" type="text/css">
+<script language="javascript" type="text/javascript" src="js/prototype.js"></script>
+<script language="javascript" type="text/javascript" src="js/menu.js"></script>
+<script language="javascript" type="text/javascript">
+var page_lang = [ 
+        {
+    	    	innerHTML:
+                {
+			    	in_sw:"Switch Config",
+			    	in_port:"Port Config"
+				}
+        },
+        {
+			innerHTML:
+            {
+				in_sw:"Switch设置",
+				in_port:"端口设置"
+			}
+        }
+    ];
+
+
+
+window.onload = function()
+{
+    var parm = cgi_header();
+
+	top.g_cur_left_url = window.location.href;
+	chgLanguage();
+    
+	$("page_body").style.visibility = "visible";
+	addMenuEvent("in_sw", "submenu_sw");
+
+    top.g_cur_main_url = "port_config.html";
+	top.mainFrame.location.href = top.g_cur_main_url;
+
+}
+function chgLanguage()
+{
+    try{
+        change_language(page_lang[top.get_lang_index()]);
+    }catch(E){
+    }
+}
+
+
+</script>
+</head>
+<body style="visibility:hidden" id="page_body">
+<table border="0" cellpadding="0" cellspacing="0">
+    <tr >
+	<td height="20" align="left"><a href="port_config.html" target="mainFrame" class="menulink" id="in_sw">Switch</a></td>
+	</tr>
+	<tr>
+		<td align="left" id="submenu_sw">
+			<table border="0" cellpadding="0" cellspacing="0">
+			<tr>
+			<td>&nbsp;&nbsp;</td>
+			<td height="20" align="left"><a href="port_config.html"  target="mainFrame" class="menulink" id="in_port">Port Config </a></td>
+			</tr>
+			</table>
+		</td>
+	</tr>
+	  
+</table>
+</body>
+</html>
+

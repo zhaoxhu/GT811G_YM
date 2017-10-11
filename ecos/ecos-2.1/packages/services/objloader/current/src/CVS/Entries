@@ -1,0 +1,6 @@
+/loader_fs.c/1.1.1.1.8.2/Wed Dec 19 06:46:36 2007//Tlynxd-generic-basedon-R6-21-1-17
+/objelf.c/1.1.1.1.8.2/Wed Dec 19 06:46:48 2007//Tlynxd-generic-basedon-R6-21-1-17
+/objloader.c/1.1.1.1.8.2/Wed Dec 19 06:46:54 2007//Tlynxd-generic-basedon-R6-21-1-17
+/relocate_i386.c/1.1.1.1.8.2/Wed Dec 19 06:47:00 2007//Tlynxd-generic-basedon-R6-21-1-17
+/relocate_ppc.c/1.1.1.1.8.2/Wed Dec 19 06:47:08 2007//Tlynxd-generic-basedon-R6-21-1-17
+D

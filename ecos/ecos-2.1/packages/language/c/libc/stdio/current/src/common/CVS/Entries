@@ -1,0 +1,23 @@
+/fclose.cxx/1.1.1.1.8.2/Wed Dec 19 04:09:09 2007//Tlynxd-generic-basedon-R6-21-1-17
+/feof.cxx/1.1.1.1.8.2/Wed Dec 19 04:09:44 2007//Tlynxd-generic-basedon-R6-21-1-17
+/fflush.cxx/1.1.1.1.8.2/Wed Dec 19 04:08:13 2007//Tlynxd-generic-basedon-R6-21-1-17
+/fileops.cxx/1.1.1.1.8.2/Wed Dec 19 04:07:54 2007//Tlynxd-generic-basedon-R6-21-1-17
+/fopen.cxx/1.1.1.1.8.2/Wed Dec 19 04:07:59 2007//Tlynxd-generic-basedon-R6-21-1-17
+/freopen.cxx/1.1.1.1.8.2/Wed Dec 19 04:08:32 2007//Tlynxd-generic-basedon-R6-21-1-17
+/fseek.cxx/1.1.1.1.8.2/Wed Dec 19 04:08:06 2007//Tlynxd-generic-basedon-R6-21-1-17
+/setvbuf.cxx/1.1.1.1.8.2/Wed Dec 19 04:09:32 2007//Tlynxd-generic-basedon-R6-21-1-17
+/snprintf.cxx/1.1.1.1.8.2/Wed Dec 19 04:09:05 2007//Tlynxd-generic-basedon-R6-21-1-17
+/sprintf.cxx/1.1.1.1.8.2/Wed Dec 19 04:09:00 2007//Tlynxd-generic-basedon-R6-21-1-17
+/sscanf.cxx/1.1.1.1.8.2/Wed Dec 19 04:08:48 2007//Tlynxd-generic-basedon-R6-21-1-17
+/stderr.cxx/1.1.1.1.8.2/Wed Dec 19 04:08:19 2007//Tlynxd-generic-basedon-R6-21-1-17
+/stdin.cxx/1.1.1.1.8.2/Wed Dec 19 04:08:43 2007//Tlynxd-generic-basedon-R6-21-1-17
+/stdiofiles.cxx/1.1.1.1.8.2/Wed Dec 19 04:09:26 2007//Tlynxd-generic-basedon-R6-21-1-17
+/stdioinlines.cxx/1.1.1.1.8.2/Wed Dec 19 04:08:55 2007//Tlynxd-generic-basedon-R6-21-1-17
+/stdiosupp.cxx/1.1.1.1.8.2/Wed Dec 19 04:07:47 2007//Tlynxd-generic-basedon-R6-21-1-17
+/stdout.cxx/1.1.1.1.8.2/Wed Dec 19 04:08:38 2007//Tlynxd-generic-basedon-R6-21-1-17
+/stream.cxx/1.1.1.1.8.2/Wed Dec 19 04:09:14 2007//Tlynxd-generic-basedon-R6-21-1-17
+/streambuf.cxx/1.1.1.1.8.2/Wed Dec 19 04:08:25 2007//Tlynxd-generic-basedon-R6-21-1-17
+/ungetc.cxx/1.1.1.1.8.2/Wed Dec 19 04:09:19 2007//Tlynxd-generic-basedon-R6-21-1-17
+/vsnprintf.cxx/1.1.1.1.8.2/Wed Dec 19 04:09:38 2007//Tlynxd-generic-basedon-R6-21-1-17
+/vsscanf.cxx/1.1.1.1.8.2/Wed Dec 19 04:09:50 2007//Tlynxd-generic-basedon-R6-21-1-17
+D

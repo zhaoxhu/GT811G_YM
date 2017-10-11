@@ -1,0 +1,12 @@
+#!/bin/bash
+# Usage:
+#    rmfilelist
+# Create an identical sub-directory tree in the dst-dir as in src-dir
+
+files=$*
+for file in $files; do
+if [ -f $file ]; then
+rm $file
+echo rm $file
+fi
+done

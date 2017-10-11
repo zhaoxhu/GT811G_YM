@@ -1,0 +1,119 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>EPON Management</title>
+<script language="JavaScript" type="text/javascript" src="js/prototype.js"></script>
+<script language="JavaScript" type="text/javascript" src="js/cookie.js"></script>
+<script language="JavaScript" type="text/javascript" src="js/lang_cmn.js"></script>
+<script language="JavaScript" type="text/javascript">
+    var g_lang = null;
+    var g_cur_lang = 0;
+    /* 0 - Auto Detect 
+       1 - English 
+       2 - Chinese 
+    */
+
+    var g_xmlhttp_url_hdr = "";
+    var g_modify_url_addr = null;
+    var g_modify_flg = 0;
+
+    var g_top = 0;
+
+    var g_cur_left_url = "menu_system.html";
+    var g_cur_main_url = "sys_info.html";
+    var g_xmlhttp = new XMLHttp();
+
+    var g_has_switch = false;
+
+
+    window.onload = function()
+    {
+        
+        get_onu_has_switch();
+
+    }
+
+function setFrame(h){
+    g_top = h;
+    $("top_frameset").rows 	= h + ",*";
+    $("main_frameset").cols = "158,*";
+}
+
+function get_lange_from_cookie(){
+    g_cur_lang  = parseInt(getWebLanguage("user"));
+
+    if(isNaN(g_cur_lang)|| (g_cur_lang < 0 
+            && g_cur_lang >= g_lang_info.type.length + 1)){
+        g_cur_lang =  0;
+    }
+    g_lang = g_lang_info.info[get_lang_index()].cmn;
+}
+
+function chgLanguage(id){
+    try{
+        g_cur_lang = id;
+        SetLangCookie(id );
+        g_lang = g_lang_info.info[get_lang_index()].cmn;
+        leftFrame.chgLanguage();
+        $("mainFrame").src = g_cur_main_url;
+    }
+    catch(E)
+    {
+        alert(E);
+    }
+}
+
+function get_lang_index()
+{
+    var isZH_CN = auto_detect_system_language();
+    var curr_lang = g_cur_lang - 1;
+
+    if(g_cur_lang == 0){
+         curr_lang = isZH_CN? 1:0;
+    }
+
+    return curr_lang;
+}
+
+
+function get_onu_has_switch()
+{
+    var parm = cgi_header();
+    g_xmlhttp.sendRequest("cgi-bin/get_switch_type.cgi" + parm, "", getSwitchResult);
+}
+
+function getSwitchResult(s, ret)
+{
+    if(check_web_status(ret) != 0 ){
+        return;
+    }
+    var has_switch = evalJSON(s);
+    
+    if(has_switch == 1){
+        g_has_switch = true;
+    }
+    get_lange_from_cookie();
+    $("mainFrame").src="loading.html";
+}
+
+
+function initSystem(){
+    $("topFrame").src = "top.html";
+}
+
+function loadMenu(str_url){
+    $("leftFrame").src = str_url;
+}
+</script>
+</head>
+
+<frameset rows="0,*" cols="*" framespacing="0" frameborder="no" border="0" id="top_frameset">
+    <frame src="#" name="topFrame" scrolling="No" noresize="noresize" id="topFrame" title="topFrame">
+    <frameset rows="*" cols="0,*" framespacing="0" frameborder="no" border="0" id="main_frameset">
+        <frame src="#" name="leftFrame" scrolling="No" noresize="noresize" id="leftFrame"
+        title="leftFrame" style="background:#000000">
+        <frame src="#" name="mainFrame" id="mainFrame" title="mainFrame">
+    </frameset>
+</frameset>
+</html>
+

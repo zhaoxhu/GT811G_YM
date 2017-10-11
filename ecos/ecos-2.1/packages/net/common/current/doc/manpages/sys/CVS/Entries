@@ -1,0 +1,13 @@
+/accept.2/1.1.1.1.8.2/Wed Dec 19 06:19:56 2007//Tlynxd-generic-basedon-R6-21-1-17
+/bind.2/1.1.1.1.8.2/Wed Dec 19 06:19:22 2007//Tlynxd-generic-basedon-R6-21-1-17
+/connect.2/1.1.1.1.8.2/Wed Dec 19 06:19:03 2007//Tlynxd-generic-basedon-R6-21-1-17
+/getpeername.2/1.1.1.1.8.2/Wed Dec 19 06:19:12 2007//Tlynxd-generic-basedon-R6-21-1-17
+/getsockname.2/1.1.1.1.8.2/Wed Dec 19 06:20:42 2007//Tlynxd-generic-basedon-R6-21-1-17
+/getsockopt.2/1.1.1.1.8.2/Wed Dec 19 06:19:32 2007//Tlynxd-generic-basedon-R6-21-1-17
+/ioctl.2/1.1.1.1.8.2/Wed Dec 19 06:20:15 2007//Tlynxd-generic-basedon-R6-21-1-17
+/poll.2/1.1.1.1.8.2/Wed Dec 19 06:19:49 2007//Tlynxd-generic-basedon-R6-21-1-17
+/select.2/1.1.1.1.8.2/Wed Dec 19 06:19:40 2007//Tlynxd-generic-basedon-R6-21-1-17
+/send.2/1.1.1.1.8.2/Wed Dec 19 06:20:33 2007//Tlynxd-generic-basedon-R6-21-1-17
+/shutdown.2/1.1.1.1.8.2/Wed Dec 19 06:20:07 2007//Tlynxd-generic-basedon-R6-21-1-17
+/socket.2/1.1.1.1.8.2/Wed Dec 19 06:20:24 2007//Tlynxd-generic-basedon-R6-21-1-17
+D

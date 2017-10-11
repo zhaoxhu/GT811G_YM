@@ -1,0 +1,10 @@
+/arch.inc/1.1.1.1.8.2/Mon Dec 17 10:53:08 2007//Tlynxd-generic-basedon-R6-21-1-17
+/basetype.h/1.1.1.1.8.2/Mon Dec 17 10:53:08 2007//Tlynxd-generic-basedon-R6-21-1-17
+/hal_arch.h/1.1.1.1.8.2/Mon Dec 17 10:53:08 2007//Tlynxd-generic-basedon-R6-21-1-17
+/hal_cache.h/1.1.1.1.8.2/Mon Dec 17 10:53:08 2007//Tlynxd-generic-basedon-R6-21-1-17
+/hal_intr.h/1.1.1.1.8.2/Mon Dec 17 10:53:08 2007//Tlynxd-generic-basedon-R6-21-1-17
+/hal_io.h/1.1.1.1.8.2/Mon Dec 17 10:53:08 2007//Tlynxd-generic-basedon-R6-21-1-17
+/hal_smp.h/1.1.1.1.8.2/Mon Dec 17 10:53:08 2007//Tlynxd-generic-basedon-R6-21-1-17
+/i386.inc/1.1.1.1.8.2/Mon Dec 17 10:53:08 2007//Tlynxd-generic-basedon-R6-21-1-17
+/i386_stub.h/1.1.1.1.8.2/Mon Dec 17 10:53:08 2007//Tlynxd-generic-basedon-R6-21-1-17
+D

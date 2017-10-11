@@ -1,0 +1,35 @@
+// eCos memory layout - Tue Feb 29 14:25:49 2000
+
+// This is a generated file - do not edit
+
+///    SECTION_data (ram, ALIGN (0x4), LMA_EQ_VMA)
+
+
+#include <cyg/infra/cyg_type.inc>
+#include <pkgconf/system.h>
+
+MEMORY
+{
+    ram  : ORIGIN = IMST_RAM_ORIGIN, LENGTH = IMST_RAM_LEN
+    rom  : ORIGIN = IMST_ROM_ORIGIN, LENGTH = IMST_ROM_LEN
+}
+
+SECTIONS
+{
+    SECTIONS_BEGIN
+    SECTION_rom_vectors (rom, IMST_ROM_ORIGIN, LMA_EQ_VMA)
+    SECTION_text (rom, ALIGN (0x4), LMA_EQ_VMA)
+    SECTION_fini (rom, ALIGN (0x4), LMA_EQ_VMA)
+    SECTION_rodata (rom, ALIGN (0x4), LMA_EQ_VMA)
+    SECTION_rodata1 (rom, ALIGN (0x4), LMA_EQ_VMA)
+    SECTION_got (rom, ALIGN (0x4), LMA_EQ_VMA)
+    SECTION_fixup (rom, ALIGN (0x4), LMA_EQ_VMA)
+    SECTION_gcc_except_table (rom, ALIGN (0x4), LMA_EQ_VMA)
+
+    SECTION_fixed_vectors (ram, (IMST_RAM_ORIGIN + 0x20), LMA_EQ_VMA)
+    SECTION_data (ram, ALIGN (0x4), FOLLOWING (.gcc_except_table))
+    SECTION_bss (ram, ALIGN (0x4), LMA_EQ_VMA)
+    CYG_LABEL_DEFN(__heap1) = ALIGN (0x8);
+
+    SECTIONS_END
+}

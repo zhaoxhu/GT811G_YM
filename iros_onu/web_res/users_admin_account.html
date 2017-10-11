@@ -1,0 +1,260 @@
+﻿<html>
+<head>
+<link rel="stylesheet" href="css/stylemain.css" type="text/css">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<script language="javascript" type="text/javascript" src="js/prototype.js"></script>
+<script language="JavaScript" type="text/javascript" src="js/cookie.js"></script>
+
+<script language="javascript" type="text/javascript" >
+var page_lang = [ 
+        {
+            title:"Admin Account",
+			innerHTML:
+			{
+			    in_hd_admin:"Admin Account",
+			    in_intro:"Admin account has unrestricted access to change and view configuration of your ONU. ",
+			    in_username:"User Name:",
+			    in_old_pwd:"Old Password:",
+			    in_new_pwd:"New Password:",
+			    in_repwd:"&nbsp;&nbsp;Confirm New Password:"
+			},
+			js_string:
+			{
+			    str_set:"Change password ",
+			    str_pwd_err:"Invaild password.",
+			    str_usr_err:"Invaild username.",
+			    str_input_err:"Only input numbers and letters.",
+			    str_old_pwd_err:"Old Password Error!"
+			}
+        },
+        {
+            title:"管理员帐号",
+			innerHTML:
+			{
+			    in_hd_admin:"管理员帐号",
+			    in_intro:"管理员帐号可以查看和更改你的ONU配置.",
+			    in_username:"用户名:",
+			    in_old_pwd:"旧密码:",
+			    in_new_pwd:"新密码:",
+			    in_repwd:"&nbsp;&nbsp;确认密码:"
+			},
+			js_string:
+			{
+			    str_set:"更改密码",
+			    str_pwd_err:"错误的密码!",
+			    str_usr_err:"错误的用户名!",
+			    str_input_err:"非法字符!",
+			    str_old_pwd_err:"旧密码错误!"
+			}
+        }
+    ];	
+	
+var html_div_loading = "";
+var str_set 	= "";
+var str_ok		= "";
+var str_failed	= "";
+var str_pwd_err = "";
+var str_usr_err	= "";
+var str_input_err = "";
+var str_old_pwd_err = "";
+function chgLanguage()
+{
+		change_language( top.g_lang);
+		change_language(page_lang[top.get_lang_index()]);
+		
+		str_set = page_lang[top.get_lang_index()].js_string.str_set;
+    str_ok = top.g_lang.js_string.set_ok;
+    str_failed = top.g_lang.js_string.set_failed;
+		str_pwd_err = page_lang[top.get_lang_index()].js_string.str_pwd_err;
+		str_usr_err	= page_lang[top.get_lang_index()].js_string.str_usr_err;
+		str_input_err  = page_lang[top.get_lang_index()].js_string.str_input_err;
+		str_old_pwd_err = page_lang[top.get_lang_index()].js_string.str_old_pwd_err;
+}
+
+window.onload = function()
+{
+	top.g_cur_main_url = window.location.href;
+	chgLanguage();
+	
+	$("page_body").style.visibility = "visible";
+	html_div_loading = $("div_loading").innerHTML;
+	$("div_loading").innerHTML = "";
+	$("username").value = getAdminName("user");
+	
+	if (LoginUser("user") != getAdminName("user")) {
+		$("div_table").innerHTML = "";
+	}
+	else
+	{
+		$("div_table").style.visibility = "visible";
+	}
+
+	$("username").disabled = true;
+}
+
+function chgPasswd()
+{
+	var parm = "";
+	parm += cgi_header();
+
+     var name = $("username").value;
+	    name = name.Trim();
+
+	var pwdnew = $("pwdnew").value;
+	    pwdnew = pwdnew.Trim();
+
+	if (name.length < 4 || name.length > 63)
+	{
+		alert(str_usr_err);
+		return;		
+	}
+	
+	if (pwdnew.length < 4 
+	|| pwdnew.length > 63
+	|| $("pwdnew").value != $("pwdcfm").value)
+	{
+		alert(str_pwd_err);
+		return;
+	}
+	
+	parm += "&name=" + name;
+	parm += "&pwdold=" + $("pwdold").value;
+	parm += "&pwdnew=" + pwdnew;
+	disableButton(true);
+	$("div_loading").innerHTML = html_div_loading;
+
+	top.g_xmlhttp.sendRequest(top.g_xmlhttp_url_hdr + "cgi-bin/set_admin_password.cgi" + parm, "", chgPasswdResult);
+}
+function chgPasswdResult(s, web_server_status)
+{
+disableButton(false);
+$("div_loading").innerHTML = "";
+if ( check_web_status( web_server_status ) == -1 )
+{
+return;
+}
+var ret = evalJSON(s);
+
+if (ret == 0)
+{
+alert(str_set + str_ok);
+}
+else if (ret == 1)
+{
+alert(str_old_pwd_err);
+}
+else
+{
+alert(str_set + str_failed);
+}
+}
+function disableButton(dis)
+{
+try
+{
+$("bt_apply").disabled = dis;
+}
+catch(E)
+{
+}	
+}
+
+ function checkInputData(e)
+ {
+  
+    var key = window.event ? e.keyCode:e.which;
+
+	if ((key <=32 && key !=8 ) || 
+		(key >126 ) ||
+		(key == 34 ) ||
+		(key == 37 )  ||
+		(key == 38 ) ||
+		(key == 43) ||
+		(key == 63)
+		)
+	{        
+		alert(str_input_err);
+
+        if (window.event) //IE
+        {
+            e.returnValue = false;   //event.returnValue=false Ч1?.
+        }
+        else //Firefox
+        {
+            e.preventDefault();
+        }
+	}  
+ }
+
+
+
+
+</script>
+<title>Admin Account </title></head>
+<body style="visibility:hidden" id="page_body">
+<blockquote>
+<table width="580" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td><strong id="in_hd_admin">Admin Account </strong></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td id="in_intro">Admin account has unrestricted access to change and view configuration of your ONU. </td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td id="div_table" style="visibility:hidden"><table border="1" cellpadding="0" cellspacing="0" bordercolor="#C0C0C0" style="border-collapse: collapse">
+<tbody>
+<tr>
+<td width='150' height="27" align="right" bgcolor="#EEEEEE" id="in_username">User Name:</td>
+<td height="27">&nbsp;
+<input name='username' type="text" class="input_style" id="username" size="20" maxlength="63" onKeypress="checkInputData(event);">
+&nbsp;</td>
+</tr>
+
+<tr>
+<td height="27" align="right" bgcolor="#EEEEEE" id="in_old_pwd">Old Password:</td>
+<td height="27">&nbsp;
+<input name='pwdold' type="password" class="input_style" id="pwdold" size="20" maxlength="63" onKeypress="checkInputData(event);">
+&nbsp;</td>
+</tr>
+
+<tr>
+<td height="27" align="right" bgcolor="#EEEEEE" id="in_new_pwd">New Password:</td>
+<td height="27">&nbsp;
+<input name='pwdnew' type="password" class="input_style" id="pwdnew" size="20" maxlength="63" onKeypress="checkInputData(event);">
+&nbsp;</td>
+</tr>
+
+<tr>
+<td height="27" align="right" bgcolor="#EEEEEE" id="in_repwd">&nbsp;&nbsp;Confirm New Password:</td>
+<td height="27">&nbsp;
+<input name='pwdcfm' type='password' class="input_style" id="pwdcfm" size="20" maxlength="63" onKeypress="checkInputData(event);">
+&nbsp;</td>
+</tr>
+<tr>
+<td height="27" align="right" bgcolor="#EEEEEE">&nbsp;</td>
+<td height="27"><table border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td>&nbsp;
+<input name="bt_apply" type="button" class="button_style" id="bt_apply" onClick="chgPasswd();" value="Apply"></td><td id="div_loading"><table border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td align="right"><img src="img/animated_loading.gif" width="32" height="32" id="burn_img"></td>
+<td><strong id="txt_step">Loading .....</strong></td>
+</tr>
+</table></td>
+</tr>
+</table></td>
+</tr>
+</tbody>
+</table></td>
+</tr>
+</table>
+</blockquote>
+</body>
+</html>

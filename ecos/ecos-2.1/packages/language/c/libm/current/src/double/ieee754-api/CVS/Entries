@@ -1,0 +1,24 @@
+/w_acos.c/1.1.1.1.8.2/Wed Dec 19 04:44:46 2007//Tlynxd-generic-basedon-R6-21-1-17
+/w_acosh.c/1.1.1.1.8.2/Wed Dec 19 04:44:54 2007//Tlynxd-generic-basedon-R6-21-1-17
+/w_asin.c/1.1.1.1.8.2/Wed Dec 19 04:44:27 2007//Tlynxd-generic-basedon-R6-21-1-17
+/w_atan2.c/1.1.1.1.8.2/Wed Dec 19 04:45:16 2007//Tlynxd-generic-basedon-R6-21-1-17
+/w_atanh.c/1.1.1.1.8.2/Wed Dec 19 04:45:02 2007//Tlynxd-generic-basedon-R6-21-1-17
+/w_cosh.c/1.1.1.1.8.2/Wed Dec 19 04:45:56 2007//Tlynxd-generic-basedon-R6-21-1-17
+/w_exp.c/1.1.1.1.8.2/Wed Dec 19 04:44:22 2007//Tlynxd-generic-basedon-R6-21-1-17
+/w_fmod.c/1.1.1.1.8.2/Wed Dec 19 04:46:00 2007//Tlynxd-generic-basedon-R6-21-1-17
+/w_gamma.c/1.1.1.1.8.2/Wed Dec 19 04:45:06 2007//Tlynxd-generic-basedon-R6-21-1-17
+/w_gamma_r.c/1.1.1.1.8.2/Wed Dec 19 04:45:35 2007//Tlynxd-generic-basedon-R6-21-1-17
+/w_hypot.c/1.1.1.1.8.2/Wed Dec 19 04:45:27 2007//Tlynxd-generic-basedon-R6-21-1-17
+/w_j0.c/1.1.1.1.8.2/Wed Dec 19 04:45:48 2007//Tlynxd-generic-basedon-R6-21-1-17
+/w_j1.c/1.1.1.1.8.2/Wed Dec 19 04:45:39 2007//Tlynxd-generic-basedon-R6-21-1-17
+/w_jn.c/1.1.1.1.8.2/Wed Dec 19 04:44:50 2007//Tlynxd-generic-basedon-R6-21-1-17
+/w_lgamma.c/1.1.1.1.8.2/Wed Dec 19 04:45:52 2007//Tlynxd-generic-basedon-R6-21-1-17
+/w_lgamma_r.c/1.1.1.1.8.2/Wed Dec 19 04:44:33 2007//Tlynxd-generic-basedon-R6-21-1-17
+/w_log.c/1.1.1.1.8.2/Wed Dec 19 04:45:19 2007//Tlynxd-generic-basedon-R6-21-1-17
+/w_log10.c/1.1.1.1.8.2/Wed Dec 19 04:44:41 2007//Tlynxd-generic-basedon-R6-21-1-17
+/w_pow.c/1.1.1.1.8.2/Wed Dec 19 04:45:23 2007//Tlynxd-generic-basedon-R6-21-1-17
+/w_remainder.c/1.1.1.1.8.2/Wed Dec 19 04:44:58 2007//Tlynxd-generic-basedon-R6-21-1-17
+/w_scalb.c/1.1.1.1.8.2/Wed Dec 19 04:45:31 2007//Tlynxd-generic-basedon-R6-21-1-17
+/w_sinh.c/1.1.1.1.8.2/Wed Dec 19 04:45:10 2007//Tlynxd-generic-basedon-R6-21-1-17
+/w_sqrt.c/1.1.1.1.8.2/Wed Dec 19 04:45:44 2007//Tlynxd-generic-basedon-R6-21-1-17
+D

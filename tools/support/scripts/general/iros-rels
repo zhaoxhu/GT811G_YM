@@ -1,0 +1,172 @@
+#!/bin/bash
+# Usage: iros-rels [OPTIONS] 
+
+showHelp()
+{
+  cat <<EOF
+iros-rels - pack iros files for release
+Usage: iros-rels [OPTIONS]
+       -h            print this message
+       -t            test only, default no
+       -f relfiles   file to list all released files, each file in the list is
+                     relative to srcdir
+                     default release/files2rels
+       -d dir        destination directory, default release/
+       -s srcdir     the directory to search for rels files
+       -a str        appending str to the release tar and directory names
+EOF
+}
+
+showHelp=0;
+testOnly=0;
+relsdirhome=release
+srcdir="."
+listfile="release/files2rels"
+appstr=std
+
+while getopts htd:f:a:s: c
+do
+   case $c in
+     h)  showHelp=1;;
+     t)  testOnly=1;;
+     d)  relsdirhome=$OPTARG;;
+     f)  listfile=$OPTARG;;
+	 s)  srcdir=$OPTARG;;
+     a)  appstr=$OPTARG;;
+    \?)
+      showHelp=1;;
+  esac
+done
+shift `expr $OPTIND - 1`
+
+if test $showHelp -eq 1 ; then
+    showHelp
+    exit 
+fi
+
+today=`date +%Y%m%d`
+
+if test ! -f $listfile ; then
+    echo $listfile not existing.
+    exit 1
+fi
+
+#remove comments
+listfile2=`mktemp`
+grep "^[a-zA-Z/\$0-9]" $listfile | sed "s/[\t\ ][\t\ ]*/:/g" > $listfile2
+
+blobfile=`head -n1 $listfile2 | awk -F: '{print $1}'`
+
+if which arm-elf-strings > /dev/zero 2>&1 ; then 
+    vers=`arm-elf-strings $blobfile | grep iROS | head -n1 | awk  '{print $3}'`
+    buildid=`arm-elf-strings $blobfile | grep iROS | head -n1 | awk  '{print $4"-"$5"-"$6}'`
+else
+    vers=`strings $blobfile | grep iROS | head -n1 | awk  '{print $3}'`
+    buildid=`strings $blobfile | grep iROS | head -n1 | awk  '{print $4"-"$5"-"$6}'`
+fi
+
+if [ -z $buildid ] ; then
+	echo The first line in $listfile is not a blob or zblob.
+    echo I do know the version and the buildid. 
+    echo A new buildid $BUILDID is assigned for this release.
+	vers=unkown
+	buildid=$BUILDID
+fi
+
+#echo $vers
+#echo $buildid
+
+relsdir=$relsdirhome/iros-$appstr-$vers-$buildid
+if test ! -d $relsdir ; then
+    mkdir $relsdir 
+    echo created $relsdir
+fi
+
+echo iros sw released iros-$appstr-$vers-$buildid
+
+files2rels=`cat $listfile2`
+for line in $files2rels ; do
+	#echo "$line"
+
+	srcfile=`echo $line | awk -F: '{print $1}'`
+	# resolve src path
+	tmpstr=`bash -c "file $srcfile"`
+	srcfilepath=`echo $tmpstr | awk -F: '{print $1}'`
+	dstfile=`echo $line | awk -F: '{print $2}'`
+	attach=`echo $line | awk -F: '{print $3}'`
+
+	dstfilepath=$relsdir/$dstfile
+	#echo $dstfilepath
+
+	if [ -d $srcfilepath ] ; then
+		#echo $srcfilepath is directory
+		dirname=`dirname $dstfilepath`
+		if [ ! -d $dirname ] ; then
+			mkdir -p $dirname
+			echo mkdir -p $dirname
+		fi
+		cp -dpr $srcfilepath $dstfilepath
+		echo cp -dpr $srcfilepath $dstfilepath
+
+    elif [ -f $srcfilepath ] ; then
+		dirname=`dirname $dstfilepath`
+		if [ ! -d $dirname ] ; then
+			mkdir -p $dirname
+			echo mkdir -p $dirname
+		fi
+
+		if [ "$attach" = "attach-buildid" ] ; then
+			ename=`extname $dstfilepath`
+			bsname=`basename $dstfilepath .$ename`
+			#echo ename $ename bsname $bsname
+			if [ -z $ename ] ; then
+				dstfilepath=$relsdir/$bsname-$vers-$buildid
+			else
+				dstfilepath=$relsdir/$bsname-$vers-$buildid.$ename
+			fi
+		fi
+
+		cp -p $srcfilepath $dstfilepath || exit 1
+		echo cp -p $srcfilepath $dstfilepath
+	else
+		echo ERROR: file $srcfilepath not found
+		echo Aborted !
+		exit 1
+    fi 
+
+#	echo $srcfilepath  $dstfile $attach
+
+done
+
+cd $relsdirhome
+
+
+#filter the verdor special info from source code
+for file in `find iros-$appstr-$vers-$buildid/src -name *.c -or -name *.h`;do 
+	cat $file | sed -e '/\#ifdef *\t*HAVE_ZTE_OAM/,/END_HAVE_ZTE_OAM/d' -e '/defined(HAVE_ZTE_OAM/,/END_HAVE_ZTE_OAM/d'  -e '/\#if *\t*defined HAVE_ZTE_OAM/,/END_HAVE_ZTE_OAM/d' -e '/\#ifndef *\t*HAVE_ZTE_OAM/d' -e '/END_NHAVE_ZTE_OAM/d'  > $file.back; 
+	mv $file.back $file;
+done
+
+for file in `find iros-$appstr-$vers-$buildid/src -name *.c -or -name *.h`;do 
+	cat $file | sed -e '/\#ifdef *\t*HAVE_YOTC/,/END_HAVE_YOTC/d' -e '/defined(HAVE_YOTC/,/END_HAVE_YOTC/d'  -e '/\#if *\t*defined HAVE_YOTC/,/END_HAVE_YOTC/d' -e '/\#ifndef *\t*HAVE_YOTC/d' -e '/END_NHAVE_YOTC/d'  > $file.back; 
+	mv $file.back $file;
+done
+
+for file in `find iros-$appstr-$vers-$buildid/src -name *.c -or -name *.h`;do 
+	cat $file | sed -e '/\#ifdef *\t*HAVE_HW_OAM/,/END_HAVE_HW_OAM/d' -e '/defined(HAVE_HW_OAM/,/END_HAVE_HW_OAM/d'  -e '/\#if *\t*defined HAVE_HW_OAM/,/END_HAVE_HW_OAM/d' -e '/\#ifndef *\t*HAVE_HW_OAM/d' -e '/END_NHAVE_HW_OAM/d'  > $file.back; 
+	mv $file.back $file;
+done
+
+#create package
+tar cfzp iros-$appstr-$vers-$buildid.tgz iros-$appstr-$vers-$buildid
+
+echo created iros-$appstr-$vers-$buildid.tgz
+rm $listfile2
+
+echo iros release completed
+
+exit
+
+
+
+

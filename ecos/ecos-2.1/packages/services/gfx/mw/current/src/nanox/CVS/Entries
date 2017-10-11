@@ -1,0 +1,20 @@
+/Makefile/1.1.1.1.8.2/Wed Dec 19 07:15:52 2007//Tlynxd-generic-basedon-R6-21-1-17
+/client.c/1.1.1.1.8.2/Wed Dec 19 07:15:42 2007//Tlynxd-generic-basedon-R6-21-1-17
+/clientfb.c/1.1.1.1.8.2/Wed Dec 19 07:14:07 2007//Tlynxd-generic-basedon-R6-21-1-17
+/elkspatch.pl/1.1.1.1.8.2/Wed Dec 19 07:14:37 2007//Tlynxd-generic-basedon-R6-21-1-17
+/error.c/1.1.1.1.8.2/Wed Dec 19 07:14:43 2007//Tlynxd-generic-basedon-R6-21-1-17
+/nanox.syms/1.1.1.1.8.2/Wed Dec 19 07:15:16 2007//Tlynxd-generic-basedon-R6-21-1-17
+/nxdraw.c/1.1.1.1.8.2/Wed Dec 19 07:15:46 2007//Tlynxd-generic-basedon-R6-21-1-17
+/nxproto.c/1.1.1.1.8.2/Wed Dec 19 07:14:13 2007//Tlynxd-generic-basedon-R6-21-1-17
+/nxproto.h/1.1.1.1.8.2/Wed Dec 19 07:15:23 2007//Tlynxd-generic-basedon-R6-21-1-17
+/nxutil.c/1.1.1.1.8.2/Wed Dec 19 07:15:10 2007//Tlynxd-generic-basedon-R6-21-1-17
+/serv.h/1.1.1.1.8.2/Wed Dec 19 07:14:28 2007//Tlynxd-generic-basedon-R6-21-1-17
+/srvclip.c/1.1.1.1.8.2/Wed Dec 19 07:15:05 2007//Tlynxd-generic-basedon-R6-21-1-17
+/srvclip1.c/1.1.1.1.8.2/Wed Dec 19 07:14:53 2007//Tlynxd-generic-basedon-R6-21-1-17
+/srvclip2.c/1.1.1.1.8.2/Wed Dec 19 07:14:33 2007//Tlynxd-generic-basedon-R6-21-1-17
+/srvevent.c/1.1.1.1.8.2/Wed Dec 19 07:14:19 2007//Tlynxd-generic-basedon-R6-21-1-17
+/srvfunc.c/1.1.1.1.8.2/Wed Dec 19 07:15:31 2007//Tlynxd-generic-basedon-R6-21-1-17
+/srvmain.c/1.1.1.1.8.2/Wed Dec 19 07:14:01 2007//Tlynxd-generic-basedon-R6-21-1-17
+/srvnet.c/1.1.1.1.8.2/Wed Dec 19 07:15:00 2007//Tlynxd-generic-basedon-R6-21-1-17
+/srvutil.c/1.1.1.1.8.2/Wed Dec 19 07:14:49 2007//Tlynxd-generic-basedon-R6-21-1-17
+D

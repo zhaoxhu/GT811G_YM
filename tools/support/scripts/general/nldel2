@@ -1,0 +1,43 @@
+#!/usr/bin/perl  
+#  nldel - delete new line control symbols
+
+
+my $colpos;
+my @Lines;
+if ($ARGV[0]) {
+    open(INFILE, "<$ARGV[0]") or die;
+    @Lines = <INFILE>;
+    close(INFILE) or die;
+} else {
+    @Lines = <STDIN>;
+}
+
+NewLineDel(\@Lines);
+
+exit;
+
+sub NewLineDel {
+	my $pLines = shift;
+	my $i = 0;
+	my $Line1;
+        my $Line2;
+	for ($i = 0; $i <= $#{@{$pLines}}; $i = $i + 2) {
+	     $Line1 = $pLines->[$i];
+	     $Line2 = $pLines->[$i+1];
+	     chomp $Line1;
+	     chomp $Line2;
+	     print "$Line2$Line1\n";
+	 }
+}
+
+
+
+
+
+
+
+
+
+
+
+

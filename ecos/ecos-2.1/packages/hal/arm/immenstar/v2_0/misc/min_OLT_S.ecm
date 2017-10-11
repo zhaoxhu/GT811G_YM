@@ -1,0 +1,46 @@
+cdl_savefile_version 1;
+cdl_savefile_command cdl_savefile_version {};
+cdl_savefile_command cdl_savefile_command {};
+cdl_savefile_command cdl_configuration { description hardware template package };
+cdl_savefile_command cdl_package { value_source user_value wizard_value inferred_value };
+cdl_savefile_command cdl_component { value_source user_value wizard_value inferred_value };
+cdl_savefile_command cdl_option { value_source user_value wizard_value inferred_value };
+cdl_savefile_command cdl_interface { value_source user_value wizard_value inferred_value };
+
+cdl_configuration eCos {
+    description "" ;
+    hardware    immenstar ;
+    template    min ;
+    package -hardware  CYGPKG_HAL_ARM_ARM9 v2_0 ;
+};
+
+cdl_option CYGDBG_HAL_COMMON_INTERRUPTS_SAVE_MINIMUM_CONTEXT {
+    user_value 0
+};
+
+cdl_option CYGDBG_HAL_COMMON_CONTEXT_SAVE_MINIMUM {
+    inferred_value 0
+};
+
+cdl_component CYG_HAL_STARTUP {
+    user_value ROM
+};
+
+cdl_component CYGBLD_GLOBAL_COMMAND_PREFIX {
+    user_value arm-elf
+};
+
+cdl_component CYG_HAL_ARM_IMST {
+  user_value OLT_S
+};
+
+cdl_component CYG_HAL_ARM_ENDIAN {
+    user_value LITTLE_ENDIAN
+};
+
+
+
+
+
+
+

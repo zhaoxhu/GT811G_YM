@@ -1,0 +1,565 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<HTML>
+<HEAD>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<LINK media=all 
+href="css/stylemain.css" type=text/css rel=stylesheet><LINK 
+media=all href="css/colors.css" type=text/css rel=stylesheet>
+<SCRIPT language=JavaScript src="js/prototype.js" type=text/javascript></SCRIPT>
+<SCRIPT language=JavaScript type=text/javascript>
+    var page_lang = [ 
+        {
+            title:"CTC Configuration Parameters",
+			innerHTML:
+            { 
+			    in_hd:"CTC Configuration Parameters", 
+				in_id:"Name",
+				in_port_list:"Port List" ,
+				in_port_link_status:"EtherLinkState",
+				in_port_us_policing:"EthUSPolicing",
+				in_port_ds_rate_limit :"EthPortDSRateLimit",
+				in_port_link_rate:"LinkRate" ,
+				in_port_admin_status :"PhyAdminStatus" ,
+				in_port_pause:"EthPortPause" ,
+				in_port_vlan_mode:"EthPortVlanMode"	,
+				in_port_vlan_id:"VlanId" ,
+				in_port_mc_tag_oper:"MulticastTagOper" ,
+				in_port_max_igmp_group:"MaxGroupNum" ,
+				in_port_loop_detect:"LoopDetect",
+  				in_port_auto_neg:"EthAutoNeg",
+  				in_mc_mode :"MulticastMode",
+  				in_ms_fast_leave:"MSFastLeave"								
+			  } , 
+			 js_string:
+			 {
+				str_NotActive:"None",
+			    vlan_mode:
+			    [
+					"Transparent Mode" ,
+					"Tag Mode",
+					"Translation Mode",	
+					"Aggregation Mode" ,
+					"Trunk Mode"
+				] ,
+				mc_tag_oper:
+				[ 
+				    "Disabled",
+				    "Enabled",
+				    "Others"					      
+                ] ,
+				settingmode:
+				[
+                    "",
+                    "Auto Neg",
+                    "Auto Neg",
+				    "10M/FD",
+				    "10M/HD",
+				    "100M/FD",
+				    "100M/HD",
+				    "1000M/FD",
+				],
+  				mc_mode:
+  				[
+					"SNOOPING" ,
+					"CTC Multicast Mode",
+					"Disable"
+				],
+ 				enable2:
+				[ 
+					"Disable",
+					"Enable"
+				] 
+			    }
+        },
+        {
+            title:"CTC 配置信息",
+			innerHTML:
+			{ 
+				in_hd:"CTC配置信息" , 
+				in_id:"名称",
+				in_port_list:"端口列表",
+				in_port_link_status:"连接状态",
+				in_port_us_policing:"上行管制",
+				in_port_ds_rate_limit :"下行限速" ,
+				in_port_link_rate:"连接速率" ,
+				in_port_admin_status :"使能状态" ,
+				in_port_pause:"流控状态" ,
+				in_port_vlan_mode :"VLAN 模式 " ,
+				in_port_vlan_id:"VlanId",
+  				in_port_mc_tag_oper :"组播剥离",
+  				in_port_max_igmp_group :"组播最大数",
+  				in_port_loop_detect:"回环检测",
+  				in_port_auto_neg:"自协商状态",
+  				in_mc_mode :"组播模式",
+  				in_ms_fast_leave:"组播快速离开"
+  			} , 
+			js_string:
+			{
+				str_NotActive:"未激活",
+                vlan_mode:
+			   	[
+					"透传模式" ,
+					"Tag模式",
+					"转换模式",	
+					"聚合模式",							
+					"Trunk 模式"
+				 ]  ,
+			    mc_tag_oper:
+			   [ 
+				    "禁用",
+				    "使能",
+				    "其他"					      
+                ] ,
+				settingmode:
+                [   
+                    "",
+				    "自动协商",
+				    "自动协商",
+				    "十兆全双工",
+				    "十兆半双工",
+				    "百兆全双工",
+				    "百兆半双工",
+				    "千兆全双工",
+ 			    ],
+  				mc_mode:
+  				[
+					"SNOOPING" ,
+					"CTC 可控组播",
+				    "禁用"
+				],   						
+ 				enable2:
+				[ 
+					"关闭",
+					"打开"
+				] 
+			}
+        }
+    ];
+
+
+
+var ctc_info 	= null;
+var html_loading= "";
+var html_div_table 	= "";
+var strNotActive = "";
+
+function chgLanguage()
+{
+    change_language(top.g_lang);
+    change_language(page_lang[top.get_lang_index()]);
+    strNotActive = page_lang[top.get_lang_index()].js_string.str_NotActive;
+}
+window.onload = function() {
+	top.g_cur_main_url = window.location.href;
+    chgLanguage();	
+
+    displayObj($("td_port1_id"),top.g_has_switch);
+    displayObj($("td_port2_id"),top.g_has_switch);
+    displayObj($("td_port3_id"),top.g_has_switch);
+    
+    displayObj($("td_port1_ln"),top.g_has_switch);
+    displayObj($("td_port2_ln"),top.g_has_switch);
+    displayObj($("td_port3_ln"),top.g_has_switch);
+
+    displayObj($("td_port1_us_policing"),top.g_has_switch);
+    displayObj($("td_port2_us_policing"),top.g_has_switch);
+    displayObj($("td_port3_us_policing"),top.g_has_switch);
+
+    displayObj($("td_port1_ds_rate_limit"),top.g_has_switch);
+    displayObj($("td_port2_ds_rate_limit"),top.g_has_switch);
+    displayObj($("td_port3_ds_rate_limit"),top.g_has_switch);
+    
+    displayObj($("td_port1_link_rate"),top.g_has_switch);
+    displayObj($("td_port2_link_rate"),top.g_has_switch);
+    displayObj($("td_port3_link_rate"),top.g_has_switch);
+
+    displayObj($("td_port1_admin_status"),top.g_has_switch);
+    displayObj($("td_port2_admin_status"),top.g_has_switch);
+    displayObj($("td_port3_admin_status"),top.g_has_switch);
+
+    displayObj($("td_port1_pause"),top.g_has_switch);
+    displayObj($("td_port2_pause"),top.g_has_switch);
+    displayObj($("td_port3_pause"),top.g_has_switch);
+
+    displayObj($("td_port1_vlan_mode"),top.g_has_switch);
+    displayObj($("td_port2_vlan_mode"),top.g_has_switch);
+    displayObj($("td_port3_vlan_mode"),top.g_has_switch);
+
+    displayObj($("td_port1_vlan_id"),top.g_has_switch);
+    displayObj($("td_port2_vlan_id"),top.g_has_switch);
+    displayObj($("td_port3_vlan_id"),top.g_has_switch);
+
+    displayObj($("td_port1_mc_tag_oper"),top.g_has_switch);
+    displayObj($("td_port2_mc_tag_oper"),top.g_has_switch);
+    displayObj($("td_port3_mc_tag_oper"),top.g_has_switch);
+
+    displayObj($("td_port1_max_igmp_group"),top.g_has_switch);
+    displayObj($("td_port2_max_igmp_group"),top.g_has_switch);
+    displayObj($("td_port3_max_igmp_group"),top.g_has_switch);
+
+    displayObj($("td_port1_loop_detect"),top.g_has_switch);
+    displayObj($("td_port2_loop_detect"),top.g_has_switch);
+    displayObj($("td_port3_loop_detect"),top.g_has_switch);
+
+    displayObj($("td_port1_auto_neg"),top.g_has_switch);
+    displayObj($("td_port2_auto_neg"),top.g_has_switch);
+    displayObj($("td_port3_auto_neg"),top.g_has_switch);
+    if(top.g_has_switch){
+        $("port_colspan").colSpan = 4;
+        $("td_mc_mode").colSpan = 4;
+        $("td_ms_fastLeave").colSpan = 4;
+    }else{
+        $("port_colspan").colSpan = 1;
+        $("td_mc_mode").colSpan = 1;
+        $("td_ms_fastLeave").colSpan = 1;
+    }
+
+
+	$("page_body").style.visibility = "visible";
+	html_loading = $("div_loading").innerHTML;
+	html_div_table = $("div_table").innerHTML;
+	$("div_table").innerHTML = "";
+		
+	GetCTCInfo();
+}
+
+function GetCTCInfo()
+{
+	$("div_loading").innerHTML = html_loading;
+	var parm = "";
+	parm += cgi_header();
+
+	top.g_xmlhttp.sendRequest("cgi-bin/ctc_info_get.cgi" + parm, "", GetCTCInfoResult);
+}
+
+function GetCTCInfoResult(s, web_server_status) {
+	
+    $("bt_refresh").disabled = false;
+    /*
+	s = "{portInfo:[\
+		{link:1,us_policy_enable:1,us_cir:100,us_cbs:200,us_ebs:300, \
+		  rate_limit_enable:1,ds_cir:100,ds_pir:100, link_rate:1,admin_status:1,pause:1,\
+		  VlanInfo:{ \
+mode: 1, Tag:[1,2,3,4,5],Translation:[{uvid:100,tvid:200},{uvid:100,tvid:200},{uvid:100,tvid:200},{uvid:100,tvid:200}],\
+trunk:[1,2,3,4,5,6,7] \
+			}\
+		  ,mc_tag_oper:0,max_igmp_group:245,loop_detect:1,auto_neg:1}\
+		,{link:0,us_policy_enable:0,us_cir:100,us_cbs:200,us_ebs:300, \
+		  rate_limit_enable:1,ds_cir:100,ds_pir:200, link_rate:2,admin_status:0,pause:0,\
+		  VlanInfo:{ \
+mode: 2, Tag:[1,2,3,4,5],Translation:[{uvid:100,tvid:200},{uvid:100,tvid:200},{uvid:100,tvid:200},{uvid:100,tvid:200}],\
+trunk:[1,2,3,4,5,6,7] \
+			}\
+		  ,mc_tag_oper:1,max_igmp_group:245,loop_detect:0,auto_neg:1}\
+		,{link:0,us_policy_enable:0,us_cir:100,us_cbs:200,us_ebs:300, \
+		  rate_limit_enable:1,ds_cir:100,ds_pir:300,link_rate:3,admin_status:1,pause:1,\
+		  VlanInfo:{ \
+mode: 4, Tag:[1,2,3,4,5],Translation:[{uvid:100,tvid:200},{uvid:100,tvid:200},{uvid:100,tvid:200},{uvid:100,tvid:200}],\
+trunk:[1,2,3,4,5,6,7] \
+			}\
+		  ,mc_tag_oper:2,max_igmp_group:245,loop_detect:1,auto_neg:1}\
+		,{link:0,us_policy_enable:0,us_cir:100,us_cbs:200,us_ebs:300, \
+		  rate_limit_enable:1,ds_cir:100,ds_pir:400,link_rate:4,admin_status:0,pause:0,\
+		  VlanInfo:{ \
+mode: 0, Tag:[1,2,3,4,5],Translation:[{uvid:100,tvid:200},{uvid:100,tvid:200},{uvid:100,tvid:200},{uvid:100,tvid:200}],\
+trunk:[1,2,3,4,5,6,7] \
+			}\
+		  ,mc_tag_oper:1,max_igmp_group:245,loop_detect:0,auto_neg:0}\
+              ],mc_mode:1,fastLeave:0}";
+          */
+	//alert(s);
+	var ctc_info = evalJSON(s);
+	
+	try
+	{
+		
+		
+		var portInfo = ctc_info.portInfo;
+		var ss=html_div_table;
+        ss=ss.replace(/PORT1_LN/g,ctc_info.portInfo[0].link?"net_up":"net_down");
+        if(top.g_has_switch){
+		    ss=ss.replace(/PORT2_LN/g,ctc_info.portInfo[1].link?"net_up":"net_down");
+		    ss=ss.replace(/PORT3_LN/g,ctc_info.portInfo[2].link?"net_up":"net_down");
+            ss=ss.replace(/PORT4_LN/g,ctc_info.portInfo[3].link?"net_up":"net_down");
+        }
+		$("div_table").innerHTML = ss;
+		
+		for(var i = 0;i < ctc_info.portInfo.length;i++){
+			if(ctc_info.portInfo[i].us_policy_enable == 1){
+				var strPolicy = "CIR = " + ctc_info.portInfo[i].us_cir + "<BR>" 
+					+ "CBS = " + ctc_info.portInfo[i].us_cbs + "<BR>"
+					+ "EBS = " + ctc_info.portInfo[i].us_ebs;
+							
+				$("td_port"+i+"_us_policing").innerHTML = strPolicy;
+			}
+			else
+				$("td_port"+i+"_us_policing").innerHTML = strNotActive;
+
+			if(ctc_info.portInfo[i].rate_limit_enable == 1){
+				var strDsRate = "CIR = " + ctc_info.portInfo[i].ds_cir + "<BR>"
+					+ "PIR = " + ctc_info.portInfo[i].ds_pir;
+				$("td_port"+i+"_ds_rate_limit").innerHTML = strDsRate;
+			}
+			else
+				$("td_port"+i+"_ds_rate_limit").innerHTML = strNotActive;
+
+			$("td_port"+i+"_link_rate").innerHTML = page_lang[top.get_lang_index()].js_string.settingmode[ctc_info.portInfo[i].link_rate];
+			$("td_port"+i+"_admin_status").innerHTML = top.g_lang.js_string.disable_enable[ctc_info.portInfo[i].admin_status];
+			$("td_port"+i+"_pause").innerHTML = top.g_lang.js_string.disable_enable[ctc_info.portInfo[i].pause];
+
+			$("td_port"+i+"_vlan_mode").innerHTML = page_lang[top.get_lang_index()].js_string.vlan_mode[ctc_info.portInfo[i].VlanInfo.mode];
+
+		    var VlanStr ="";
+			if(ctc_info.portInfo[i].VlanInfo.mode == 0)  //Transparent	
+				VlanStr = "-";
+			else if(ctc_info.portInfo[i].VlanInfo.mode == 1){ // Tag
+				
+				for(var j = 0; j < ctc_info.portInfo[i].VlanInfo.Tag.length; j++){
+						VlanStr += "<li> "+ ctc_info.portInfo[i].VlanInfo.Tag[j] + "<BR>";
+				}
+				
+			}else if(ctc_info.portInfo[i].VlanInfo.mode == 2){ //Translation mode
+				
+				for(var j =0; j <ctc_info.portInfo[i].VlanInfo.Translation.length; j++){
+						VlanStr += "<li> "+ ctc_info.portInfo[i].VlanInfo.Translation[j].uvid + ":"
+							+ ctc_info.portInfo[i].VlanInfo.Translation[j].tvid + "<BR>";
+				}
+			}else if(ctc_info.portInfo[i].VlanInfo.mode == 4) {//Trunk mode 
+				
+				for(var j =0; j <ctc_info.portInfo[i].VlanInfo.trunk.length; j++){
+					
+					VlanStr += "<li> "+ ctc_info.portInfo[i].VlanInfo.trunk[j] + "<BR>";
+				}
+			}
+
+			//alert(VlanStr);
+			$("td_port"+i+"_vlan_id").innerHTML  = VlanStr;
+			
+
+			$("td_port"+i+"_mc_tag_oper").innerHTML = page_lang[top.get_lang_index()].js_string.mc_tag_oper[ctc_info.portInfo[i].mc_tag_oper];
+			$("td_port"+i+"_max_igmp_group").innerHTML = ctc_info.portInfo[i].max_igmp_group;
+			$("td_port"+i+"_loop_detect").innerHTML = top.g_lang.js_string.disable_enable[ctc_info.portInfo[i].loop_detect];
+
+			$("td_port"+i+"_auto_neg").innerHTML = top.g_lang.js_string.disable_enable[ctc_info.portInfo[i].auto_neg];
+
+
+		}
+		$("td_mc_mode").innerHTML = page_lang[top.get_lang_index()].js_string.mc_mode[ctc_info.mc_mode];
+
+		$("td_ms_fastLeave").innerHTML = page_lang[top.get_lang_index()].js_string.enable2[ctc_info.fastLeave];
+
+			
+		
+	}catch(E)
+	{
+		alert("failed ");
+	}
+
+	$("div_loading").innerHTML = "";
+}
+
+
+
+
+
+</SCRIPT>
+<META content="MSHTML 6.00.2900.3132" name=GENERATOR></HEAD>
+<BODY id=page_body style="VISIBILITY: hidden">
+<BLOCKQUOTE>
+<TABLE cellSpacing=0 cellPadding=0 width=580 border=0>
+<TBODY>
+<TR>
+<TD><STRONG id=in_hd>CTC Configuration Parameters</STRONG></TD></TR>
+<TR>
+<TD>&nbsp;</TD></TR>
+<TR>
+<TD>
+<TABLE cellSpacing=0 cellPadding=0 border=0>
+<TBODY>
+<TR>
+<TD><INPUT class=button_style id=bt_refresh onclick=GetCTCInfo(); type=button value=Refresh name=bt_refresh></TD>
+<TD id=div_loading>
+<TABLE cellSpacing=0 cellPadding=0 border=0>
+<TBODY>
+<TR>
+<TD align=right><IMG id=burn_img height=32 
+src="img/animated_loading.gif" width=32></TD>
+<TD><STRONG id=txt_step>Loading 
+.....</STRONG></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+
+<TR>
+<TD height=10></TD></TR>
+
+
+
+
+<TR>
+<!--
+<TD id=div_table style="VISIBILITY: hidden">
+-->
+<TD id=div_table >
+
+
+<TABLE style="BORDER-COLLAPSE: collapse" borderColor=#c0c0c0 
+cellSpacing=0 cellPadding=0 border=1>
+<TBODY>
+<TR>
+<TD align=middle  width=100 bgColor=#f0f0f0 
+rowSpan=2><STRONG>&nbsp;<SPAN id=in_id>ID</SPAN>&nbsp;</STRONG></TD>
+
+<TD id=port_colspan align=middle   height=30 bgColor=#f0f0f0 
+colSpan=4><STRONG>&nbsp;&nbsp;&nbsp;&nbsp;<SPAN id=in_port_list>Port 
+List</SPAN>&nbsp;&nbsp;&nbsp; </STRONG></TD></TR>
+<TR>
+<TD align=middle height=30  
+bgColor=#f0f0f0>&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;</TD>
+<TD align=middle width=150 bgColor=#f0f0f0 id=td_port1_id>2</TD>
+<TD align=middle width=150 bgColor=#f0f0f0 id=td_port2_id >3</TD>
+<TD align=middle width=150 bgColor=#f0f0f0 id=td_port3_id >4</TD></TR>
+
+<TR onmouseover="this.style.background='#EEEEEE';" 
+onmouseout="this.style.background='#FFFFFF';">
+<TD align=middle width=100 bgColor=#f0f0f0><SPAN id=in_port_link_status>EtherLinkState</SPAN></TD>
+<TD align=middle height=30 width=150 ><IMG height=24 src="img/PORT1_LN.gif"width=24></TD>
+<TD align=middle width=150 id=td_port1_ln ><IMG height=24 src="img/PORT2_LN.gif"width=24></TD>
+<TD align=middle width=150 id=td_port2_ln ><IMG height=24 src="img/PORT3_LN.gif"width=24></TD>
+<TD align=middle width=150 id=td_port3_ln ><IMG height=24 src="img/PORT4_LN.gif"width=24></TD>
+</TR>
+
+
+<TR onmouseover="this.style.background='#EEEEEE';" 
+onmouseout="this.style.background='#FFFFFF';">
+<TD align=middle bgColor=#f0f0f0><SPAN id=in_port_us_policing>USPolicing</SPAN></TD>
+<TD align=middle height=30 width=150 id=td_port0_us_policing>PORT1</TD>
+<TD align=middle width=150  id=td_port1_us_policing >PORT2</TD>
+<TD align=middle width=150  id=td_port2_us_policing>PORT3</TD>
+<TD align=middle width=150  id=td_port3_us_policing>PORT4</TD>
+</TR>
+
+<TR onmouseover="this.style.background='#EEEEEE';" 
+onmouseout="this.style.background='#FFFFFF';">
+<TD align=middle bgColor=#f0f0f0><SPAN id=in_port_ds_rate_limit>EthPortDSRateLimit</SPAN></TD>
+<TD align=middle height=30 width=150 id=td_port0_ds_rate_limit>PORT1</TD>
+<TD align=middle width=150  id=td_port1_ds_rate_limit >PORT2</TD>
+<TD align=middle width=150  id=td_port2_ds_rate_limit>PORT3</TD>
+<TD align=middle width=150  id=td_port3_ds_rate_limit>PORT4</TD>
+</TR>
+
+<TR onmouseover="this.style.background='#EEEEEE';" 
+onmouseout="this.style.background='#FFFFFF';">
+<TD align=middle bgColor=#f0f0f0><SPAN id=in_port_link_rate>LinkRate</SPAN></TD>
+<TD align=middle height=30 width=150 id=td_port0_link_rate>PORT1</TD>
+<TD align=middle width=150  id=td_port1_link_rate >PORT2</TD>
+<TD align=middle width=150  id=td_port2_link_rate>PORT3</TD>
+<TD align=middle width=150  id=td_port3_link_rate>PORT4</TD>
+</TR>
+
+<TR onmouseover="this.style.background='#EEEEEE';" 
+onmouseout="this.style.background='#FFFFFF';">
+<TD align=middle bgColor=#f0f0f0><SPAN id=in_port_admin_status>phyAdminStatus</SPAN></TD>
+<TD align=middle height=30 width=150 id=td_port0_admin_status>PORT1</TD>
+<TD align=middle width=150  id=td_port1_admin_status >PORT2</TD>
+<TD align=middle width=150  id=td_port2_admin_status>PORT3</TD>
+<TD align=middle width=150  id=td_port3_admin_status>PORT4</TD>
+</TR>
+
+<TR onmouseover="this.style.background='#EEEEEE';" 
+onmouseout="this.style.background='#FFFFFF';">
+<TD align=middle bgColor=#f0f0f0><SPAN id=in_port_pause>EthPortPause</SPAN></TD>
+<TD align=middle height=30 width=150 id=td_port0_pause>PORT1</TD>
+<TD align=middle width=150  id=td_port1_pause >PORT2</TD>
+<TD align=middle width=150  id=td_port2_pause>PORT3</TD>
+<TD align=middle width=150  id=td_port3_pause>PORT4</TD>
+</TR>
+
+<TR onmouseover="this.style.background='#EEEEEE';" 
+onmouseout="this.style.background='#FFFFFF';">
+<TD align=middle bgColor=#f0f0f0><SPAN id=in_port_vlan_mode>EthPortVlanMode</SPAN></TD>
+<TD align=middle height=30 width=150 id=td_port0_vlan_mode>PORT1</TD>
+<TD align=middle width=150  id=td_port1_vlan_mode >PORT2</TD>
+<TD align=middle width=150  id=td_port2_vlan_mode>PORT3</TD>
+<TD align=middle width=150  id=td_port3_vlan_mode>PORT4</TD>
+</TR>
+
+
+<TR onmouseover="this.style.background='#EEEEEE';" 
+onmouseout="this.style.background='#FFFFFF';">
+<TD align=middle bgColor=#f0f0f0><SPAN id=in_port_vlan_id>EthPortVlanId</SPAN></TD>
+<TD align=middle height=30 width=150 id=td_port0_vlan_id>PORT1</TD>
+<TD align=middle width=150  id=td_port1_vlan_id >PORT2</TD>
+<TD align=middle width=150  id=td_port2_vlan_id>PORT3</TD>
+<TD align=middle width=150  id=td_port3_vlan_id>PORT4</TD>
+</TR>
+
+
+
+
+<TR onmouseover="this.style.background='#EEEEEE';" 
+onmouseout="this.style.background='#FFFFFF';">
+<TD align=middle bgColor=#f0f0f0><SPAN id=in_port_mc_tag_oper>MulticastTagOper</SPAN></TD>
+<TD align=middle height=30 width=150 id=td_port0_mc_tag_oper>PORT1</TD>
+<TD align=middle width=150  id=td_port1_mc_tag_oper >PORT2</TD>
+<TD align=middle width=150  id=td_port2_mc_tag_oper>PORT3</TD>
+<TD align=middle width=150  id=td_port3_mc_tag_oper>PORT4</TD>
+</TR>
+
+<TR onmouseover="this.style.background='#EEEEEE';" 
+onmouseout="this.style.background='#FFFFFF';">
+<TD align=middle bgColor=#f0f0f0><SPAN id=in_port_max_igmp_group>MaxGroupNum</SPAN></TD>
+<TD align=middle height=30 width=150 id=td_port0_max_igmp_group>PORT1</TD>
+<TD align=middle width=150  id=td_port1_max_igmp_group >PORT2</TD>
+<TD align=middle width=150  id=td_port2_max_igmp_group>PORT3</TD>
+<TD align=middle width=150  id=td_port3_max_igmp_group>PORT4</TD>
+</TR>
+
+
+<TR onmouseover="this.style.background='#EEEEEE';" 
+onmouseout="this.style.background='#FFFFFF';">
+<TD align=middle bgColor=#f0f0f0><SPAN id=in_port_loop_detect>LoopDetect</SPAN></TD>
+<TD align=middle height=30 width=150 id=td_port0_loop_detect>PORT1</TD>
+<TD align=middle width=150  id=td_port1_loop_detect >PORT2</TD>
+<TD align=middle width=150  id=td_port2_loop_detect>PORT3</TD>
+<TD align=middle width=150  id=td_port3_loop_detect>PORT4</TD>
+</TR>
+
+
+
+<TR onmouseover="this.style.background='#EEEEEE';" 
+onmouseout="this.style.background='#FFFFFF';">
+<TD align=middle bgColor=#f0f0f0><SPAN id=in_port_auto_neg>EthAutoNeg</SPAN></TD>
+<TD align=middle height=30 width=150 id=td_port0_auto_neg>PORT1</TD>
+<TD align=middle width=150  id=td_port1_auto_neg >PORT2</TD>
+<TD align=middle width=150  id=td_port2_auto_neg>PORT3</TD>
+<TD align=middle width=150  id=td_port3_auto_neg>PORT4</TD>
+</TR>
+
+
+
+<TR onmouseover="this.style.background='#EEEEEE';" 
+onmouseout="this.style.background='#FFFFFF';">
+<TD align=middle bgColor=#f0f0f0><SPAN id=in_mc_mode>MulticastMode</SPAN></TD>
+<TD align=middle colspan=4 height=30 width=150 id=td_mc_mode>PORT1</TD>
+
+</TR>
+
+
+<TR onmouseover="this.style.background='#EEEEEE';" 
+onmouseout="this.style.background='#FFFFFF';">
+<TD align=middle bgColor=#f0f0f0><SPAN id=in_ms_fast_leave>MSFastLeave</SPAN></TD>
+<TD align=middle colspan = 4 height=30 width=150 id=td_ms_fastLeave>PORT1</TD>
+</TR>
+
+</TBODY></TABLE>
+
+</TD></TR></TBODY></TABLE>
+
+<BR>
+
+<BR>
+
+<BR>
+<BR>
+
+</BLOCKQUOTE></BODY></HTML>
+

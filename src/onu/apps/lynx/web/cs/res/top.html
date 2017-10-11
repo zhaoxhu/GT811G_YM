@@ -1,0 +1,304 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" >
+<title>EPON Mgmt</title>
+<link rel="stylesheet" href="/css/stylemain.css" type="text/css">
+<style>
+	td {
+        FONT-SIZE: 9pt;
+        COLOR: #000000; 
+        FONT-FAMILY: verdana,arial,sans-serif
+	}
+	a:link {
+	    COLOR: #000000; 
+        TEXT-DECORATION: none
+	}
+	a:visited {
+	    COLOR: #000000;
+        TEXT-DECORATION: none
+	}
+	a:active {
+	    COLOR: #1f8cfa;
+        TEXT-DECORATION: none
+	}
+	a:hover {
+	    COLOR: #1f8cfa;
+        TEXT-DECORATION: none
+	}
+	body {
+	    margin-left: 0px;
+	    margin-top: 0px;
+	}
+</style>
+<script language="javascript" type="text/javascript" src="js/prototype.js"></script>
+<script language="JavaScript" type="text/javascript" src="js/cookie.js"></script>
+<script language="javascript" type="text/javascript">
+    var page_lang = [ 
+            {
+            	title:"Save Configuration",
+				innerHTML:
+				{
+				    in_hd:"Save Configuration",
+                    in_save:"Save Configuration to Flash",
+                    in_st:"Status",
+				    in_se:"Setup",
+				    in_ma:"Management",
+				    in_ma_adv:"Advance Management",
+				    in_us:"User"
+				},
+				value:
+				{
+				    bt_apply:"Save Config",
+			        bt_download:"Download Config"
+				},
+				js_string:
+				{
+				    str_save:"Save configuration to flash ",
+                    str_download_failed:"Download configuration failed.",
+                    str_auto_detect:"Auto-Detect"
+
+				}
+            },
+            {
+                title:"保存配置信息",
+				innerHTML:
+				{
+				    in_hd:"保存配置信息",
+                    in_save:"保存配置信息到FLASH",
+                    in_st:"系统状态",
+    				in_se:"高级配置",
+	    			in_ma:"系统管理",
+                    in_ma_adv:"高级系统管理",
+				    in_us:"用户管理"
+				},
+				value:
+				{
+				    bt_apply:"保存配置" ,
+				    bt_download:"下载配置"
+				},
+				js_string:
+				{
+				    str_save:"保存配置信息到FLASH",
+                    str_download_failed:"下载配置失败.",
+                    str_auto_detect:"自动选择"
+				}
+
+            }
+        ];
+
+	var str_save 	= null;
+	var str_ok		= null;
+	var str_failed 	= null;
+
+    function chgLanguage()
+    {
+        var index = top.get_lang_index();
+        str_save 	= page_lang[index].js_string.str_save;
+        change_language(top.g_lang);
+        change_language(page_lang[index]);
+        str_ok 		= top.g_lang.js_string.set_ok;
+        str_failed 	= top.g_lang.js_string.set_failed;
+    }
+
+
+	function downloadConfig() {
+		$("bt_download").disabled 	= true;
+		var parm = "";
+		parm += cgi_header();
+		top.g_xmlhttp.sendRequest("cgi-bin/config_download.cgi" + parm, "", downloadConfigResult);
+	}
+
+
+	function downloadConfigResult(s) {
+		$("bt_download").disabled 	= false;
+		var ret = evalJSON(s);
+		if (ret == 0) {
+			window.location.href='/config.bin';
+		} else {
+			alert(str_save + str_failed);
+		}
+	}
+
+
+	function saveConfig() {
+		$("bt_apply").disabled 	= true;
+		var parm = "";
+		parm += cgi_header();
+		top.g_xmlhttp.sendRequest("cgi-bin/config_save.cgi" + parm, "", saveConfigResult);
+	}
+	
+	function saveConfigResult(s) {
+		$("bt_apply").disabled 	= false;
+		var ret = evalJSON(s);
+		if (ret == 0) {
+			alert(str_save + str_ok);
+		} else {
+			alert(str_save + str_failed);
+		}
+    }
+
+
+	window.onload = function()
+	{
+        $("select_lang").options.length = 0;
+        var curr_lang = top.get_lang_index();
+
+        var lan = page_lang[curr_lang].js_string.str_auto_detect;
+
+        $("select_lang").options[0] = new Option(lan, 0);
+        for (var i = 0; i < top.g_lang_info.type.length; i++)
+        {
+            $("select_lang").options[i+1] = new Option(top.g_lang_info.type[i], i+1);
+        }
+
+        $("select_lang").selectedIndex = top.g_cur_lang;
+		
+		$("page_body").style.visibility = "visible";
+		try 
+		{
+			top.setFrame(119);
+			top.loadMenu(top.g_cur_left_url);
+		}catch(e)
+		{
+			alert(e);
+		}
+
+        chgLanguage();
+
+		var user = LoginUser("user");
+		if (user != getAdminName("user")) {
+			$("bt_apply").disabled 	= true;
+		}
+		else
+		{
+			$("bt_apply").disabled 	= false;
+		}
+	}
+
+	function chg_lang_click(lang_id)
+    {
+        top.chgLanguage(lang_id );
+        var curr_lang = top.get_lang_index();
+        
+        $("select_lang").options[0].text = page_lang[curr_lang].js_string.str_auto_detect;
+
+
+        chgLanguage();
+	}
+	
+	
+</script>
+</head>
+
+
+<body style="visibility:hidden" id="page_body">
+    <table cellSpacing="0" cellPadding="0" border="0" width="730">
+        <tbody>
+            <tr>
+                <td width="730" colSpan="5">
+                    <table cellSpacing="0" cellPadding="0" width="730" border="0">
+                        <tbody>
+                            <tr>
+                                <td valign="bottom">
+                                    <table cellSpacing="0" cellPadding="0" width="730" border="0">
+                                        <tbody>
+                                            <tr>
+                                                <td width="568" colSpan="4">
+                                                    <table cellSpacing="0" cellPadding="0" border="0" width="772" style="border-collapse:collapse">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td colSpan="3" width="767">
+                                                                    <table cellSpacing="0" cellPadding="0" width="692" border="0">
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td width="93" rowSpan="2"><img src="img/logo.gif" border="0"></td>
+                                                                                <td align="right" width="599">&nbsp;</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td align="left" width="599">                            	
+                                                                                    <table cellSpacing="0" cellPadding="0" border="0">
+                                                                                        <tbody>
+                                                                                            <tr>
+                                                                                                <td width="100">&nbsp;</td>
+                                                                                                <td align="center" height="20" width="80"><a href="menu_system.html" target="leftFrame"><img src="img/nav_network.gif" border="0" height="27" width="48"></a></td>
+                                                                                                <td width="10">&nbsp;</td>
+                                                                                                <td align="center" height="20" width="80"><a href="menu_setup.html" target="leftFrame"><img src="img/nav_network.gif" border="0" height="27" width="48"></a></td>
+                                                                                                <td width="10">&nbsp;</td>
+                                                                                                <td align="center" height="20" width="100"><a href="menu_mgt.html" target="leftFrame"><img border="0" src="img/nav_network.gif" width=48 height=27></a></td>
+                                                                                                <td width="10">&nbsp;</td>
+                                                                                                <td align="center" width="100"><a href="menu_users.html" target="leftFrame"><img border="0" src="img/nav_network.gif" width=48 height=27></a></td>
+                                                                                                <td width="10">&nbsp;</td>
+                                                                                            </tr>
+                                                                                            <tr>
+                                                                                                <td width="100">&nbsp;</td>
+                                                                                                <td valign="top" align="center" height="20" width="80"><a href="menu_system.html" target="leftFrame" ><b id="in_st">Status</b></a></td>
+                                                                                                <td valign="top" align="center"><img src="img/sep_top.gif" border="0" height="9" width="1"></td>
+                                                                                                <td valign="top" align="center" height="20" width="80"><a href="menu_setup.html" target="leftFrame" ><b id="in_se">Setup</b></a></td>
+                                                                                                <td valign="top" align="center"><img src="img/sep_top.gif" border="0" height="9" width="1"></td>
+                                                                                                <td valign="top" align="center" height="20" width=100><a href="menu_mgt.html" target="leftFrame" ><b id="in_ma">Management</b></a></td>
+                                                                                                <td valign="top" align="center"><img border="0" src="img/sep_top.gif" width="1" height="9"></td>
+                                                                                                <td valign="top" align="center" width=100><a href="menu_users.html" target="leftFrame" ><b id="in_us">User</b></a></td>
+                                                                                                <td width="150">&nbsp;</td>
+                                                                                            </tr>
+                                                                                            <tr>
+                                                                                                <td valign="top" align=right bgColor=#ffffff colSpan=5></td>
+                                                                                            </tr>
+                                                                                        </tbody>
+                                                                                </table>									</td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                </table>							  </td>
+                                                                <td width=32><img src="img/banner_right_top_curve.gif" border="0" height="70" width="32"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td valign="top" rowSpan=2 width="157"><img height=49 src="img/banner_left.gif" width=158></td>
+                                                                <td valign="top" rowSpan=2 width="26"><img src="img/banner_left_curve2.gif" border="0" height="47" width="26"></td>
+                                                                <td valign="top" width="584">
+                                                                    <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse" width="100%" id="AutoNumber1">
+                                                                        <tr>
+                                                                            <td width="556" height="21" align="right" bgcolor="#000000"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                                                                    <tr>
+                                                                                        <td width="26%"></td>
+                                                                                        <td width="74%" align="right"><table border="0" cellspacing="0" cellpadding="0">
+                                                                                                <tr>
+                                                                                                    <td>&nbsp;
+                                                                                                        <select name="select_lang" id="select_lang" onChange="chg_lang_click(this.selectedIndex);">
+                                                                                                            <option value="0" selected>English</option>
+                                                                                                            <option value="1">简体中文<option>
+                                                                                                        </select>&nbsp;
+                                                                                                    </td>
+                                                                                                    <td align="center" valign="middle" id="td_save"><input name="bt_apply" type="submit" class="normal_bt_style" id="bt_apply" value="Save Config" onClick="saveConfig();"></td>
+                                                                                                    <td align="center" valign="middle" id="td_download"><input name="bt_download" type="submit" class="normal_bt_style" id="bt_download" value="Download Config" onClick="downloadConfig();"></td>
+
+                                                                                                </tr>
+                                                                                            </table>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                            </table></td>                           
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td width="100%" height="11"></td>
+                                                                        </tr>
+                                                                </table>							  </td>
+                                                                <td valign="top" width=32 rowSpan=2><img src="img/banner_right_bottom_curve.gif" border="0" height="21" width="32"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td width="584"></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
+

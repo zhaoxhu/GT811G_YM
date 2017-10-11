@@ -1,0 +1,29 @@
+#!/bin/bash
+# Usage:
+#    deplist objtmpdir file1 file2
+# Create a list of deps for each obj file
+
+objtmpdir=$1
+extname=$2
+
+shift 2
+
+files=$*
+#echo 1 $objtmpdir
+#echo 2 $files
+
+for file in $files; do
+#echo proc $file
+bsname=$(basename $(basename $(basename $file .c) .cxx) .s)
+
+printf "%s/%s.%s: %s\n" $objtmpdir $bsname $extname $file
+if [ $extname == o ] ; then
+printf "\t%s\n" "echo \"[ Compile \$(CC) ]       \$< \"";
+printf "\t%s\n" "\$(CC) \$(CFLAGS) \$(MOD_CFLAGS) \$(MOD_INCLUDES) \$(INCLUDES) \$< -o \$@";
+elif [ $extname == d ] ; then
+printf "\t%s\n" "[ -d \$(MOD_TMPHOME) ] || clonedirs \$(MOD_HOME) \$(MOD_TMPHOME)";
+printf "\t%s\n" "\$(SHELL) -ec '\$(CC) -MM \$(CFLAGS) \$(MOD_CFLAGS) \$(MOD_INCLUDES) \$(INCLUDES) \$<  | sed '\''s!\(\$(addsuffix \.o, \$(basename \$(notdir \$<)))\)[ :]*!\$(@:.d=.o) \$@ : !g '\'' | sed -e '1d' > \$@ ; [ -s \$@ ] || rm -f \$@'";
+fi
+
+done
+

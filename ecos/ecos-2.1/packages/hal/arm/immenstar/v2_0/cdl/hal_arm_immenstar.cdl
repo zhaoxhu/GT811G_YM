@@ -1,0 +1,1032 @@
+cdl_package CYGPKG_HAL_ARM_IMST {
+    display       "ImmenStar ARM platforms"
+    parent        CYGPKG_HAL_ARM
+    define_header hal_arm_immenstar.h
+    include_dir   cyg/hal
+    hardware
+    description   "
+        The immenstar HAL package provides the support needed to run
+        eCos on an ARM IMST evaluation board."
+
+    compile       hal_diag.c immenstar_misc.c immenstar_debug_led.c
+
+#    implements    CYGINT_HAL_TESTS_NO_CACHES
+#    implements    CYGINT_HAL_ARM_ARM9_VARIANT
+
+    cdl_interface CYGINT_DEVS_FLASH_INTEL_28FXXX_REQUIRED {
+        display   "Generic 28f160c3 driver required"
+    }
+
+    define_proc {
+        puts $::cdl_system_header "#define CYGBLD_HAL_TARGET_H   <pkgconf/hal_arm.h>"
+        puts $::cdl_system_header "#define CYGBLD_HAL_PLATFORM_H <pkgconf/hal_arm_immenstar.h>"
+        puts $::cdl_header ""
+        puts $::cdl_header "#define HAL_PLATFORM_BOARD  \"IMST\""
+        puts $::cdl_header "#define HAL_PLATFORM_EXTRA  \"\""
+        puts $::cdl_header ""
+    }
+
+    cdl_component CYGPKG_HAL_ARM_IMST_ARM7 {
+	display "ARM 7 specialization"
+	active_if  !CYGPKG_HAL_ARM_ARM9
+	calculated !CYGPKG_HAL_ARM_ARM9
+
+	implements    CYGINT_HAL_ARM_ARCH_ARM7
+
+	define_proc {
+	    puts $::cdl_header "#define HAL_PLATFORM_CPU    \"ARM 7TDMI\""
+	}
+    }
+
+    cdl_component CYGPKG_HAL_ARM_IMST_ARM9 {
+	display "ARM 9 specialization"
+	active_if  CYGPKG_HAL_ARM_ARM9
+	calculated CYGPKG_HAL_ARM_ARM9
+
+	requires    CYGPKG_HAL_ARM_ARM9_ARM926EJ
+
+	define_proc {
+	    puts $::cdl_header "#define HAL_PLATFORM_CPU    \"ARM 9\""
+	}
+
+	cdl_component IMST_USE_CACHE {
+           display "Use ARM9 CACHE"
+           flavor bool
+           default_value 0
+           no_define
+           define -file system.h IMST_USE_CACHE
+           description "This option is selected to build standalone test with min size."
+        }
+    }
+
+
+
+
+    cdl_option CYG_HAL_ARM_ENDIAN {
+        display "ARM ENDIANESS"
+        legal_values  {"LITTLE_ENDIAN" "BIG_ENDIAN"}
+        flavor  data
+        define -file system.h CYG_HAL_ARM
+        default_value { "LITTLE_ENDIAN" }
+        description "
+           This option specifies the arm endianess."
+
+    }
+
+    cdl_component BUILD_STANDALONE_TEST {
+           display "Building standalone test with minimal size"
+           parent  CYGPKG_NONE
+           flavor bool
+           default_value 0
+           no_define
+           define -file system.h BUILD_STANDALONE_TEST
+           description "This option is selected to build standalone test with min size."
+    }
+
+
+    cdl_component BUILD_ROM_APP {
+           display "Building application which can run from flash"
+           parent  CYGPKG_NONE
+           flavor bool
+           default_value 0
+           no_define
+           define -file system.h BUILD_ROM_APP
+           description "This option is selected to build standalone test with min size."
+    }
+
+
+    cdl_component BUILD_IROSBOOT {
+         display "Building immenstar ROM Loader"
+         parent  CYGPKG_NONE
+	 flavor bool
+	 default_value 0
+	 no_define
+         define -file system.h IROSBOOT
+
+	 description "This option is selected to build immenstar loader image."
+
+         cdl_component BUILD_MIN_LOADER {
+           display "Building loader with minimal size"
+           parent  CYGPKG_NONE
+           flavor bool
+           default_value 0
+           no_define
+           define -file system.h BUILD_MIN_LOADER
+           description "This option is selected to build loader of minimal size."
+         }
+
+
+
+         cdl_option BUILD_IROSBOOT_UART_LOAD {
+              display "Building immenstar ROM Loader with uart loading"
+	      flavor bool
+	      default_value 0
+	      active_if {BUILD_IROSBOOT != 0}
+	      no_define
+	      define -file system.h IROSBOOT_UART_LOAD
+	      description "This option is selected to build immenstar loader image with uart loading option."
+         }
+
+	 cdl_option IROSBOOT_XYZMODEM_USE_DEBUG_CHAN {
+	      display "iROSBoot uses one serial port to debug and upload/download"
+	      flavor bool
+              default_value 1
+              active_if {BUILD_IROSBOOT != 0}
+              no_define
+              define -file system.h IROSBOOT_XYZMODEM_USE_DEBUG_CHAN
+              description "This option is selected to use a single serial port otherwise
+                           we must have two serial ports one for debugging, one for download/upload."
+	 }
+
+         cdl_option BUILD_IROSBOOT_FLASH_LOAD {
+              display "Building immenstar ROM Loader with flash loading"
+	      flavor bool
+	      default_value 0
+	      active_if {BUILD_IROSBOOT != 0}
+	      no_define
+	      define -file system.h IROSBOOT_FLASH_LOAD
+	      description "This option is selected to build immenstar loader image with flash loading option."
+         }
+
+         cdl_option BUILD_IROSBOOT_ETH_LOAD {
+              display "Building immenstar ROM Loader with ethernet loading option"
+	      flavor bool
+	      default_value 0
+	      active_if {BUILD_IROSBOOT != 0}
+	      no_define
+	      define -file system.h IROSBOOT_ETH_LOAD
+	      description "This option is selected to build immenstar loader image with ethernet loading."
+         }
+
+
+
+         cdl_option CYGNUM_IROSBOOT_CMD_LINE_EDITING {
+              display          "Enable command line editing"
+              flavor           data
+              default_value    4
+	      active_if {BUILD_IROSBOOT}
+	      define -file system.h CYGNUM_IROSBOOT_CMD_LINE_EDITING
+              description      "
+                 If this option is non-zero, iROSBoot will remember the last N command
+                 lines.  These lines may be reused.  Enabling this history will also
+                 enable rudimentary editting of the lines themselves."
+          }
+
+
+          cdl_option CYGNUM_IROSBOOT_CLI_IDLE_TIMEOUT {
+              display       "Command processing idle timeout (ms)"
+              flavor        data
+              default_value 10
+	      active_if {BUILD_IROSBOOT}
+	      define -file system.h CYGNUM_IROSBOOT_CLI_IDLE_TIMEOUT
+              description   "
+                This option controls the timeout period before the
+                command processing is considered 'idle'.  Making this
+                number smaller will cause idle processing to take place
+                more often, etc.  The default value of 10ms is a reasonable
+                tradeoff between responsiveness and overhead."
+          }
+
+
+          cdl_option CYGPKG_IROSBOOT_MAX_CMD_LINE {
+              display       "Maximum command line length"
+              flavor        data
+              default_value 64
+              description   "
+                This option allows control over how long the CLI command line
+                should be.  This space will be allocated statically
+                rather than from iROSBoot's stack."
+          }
+       }
+
+       cdl_option BUILD_IROS_VT {
+              display "Building immenstar ROM image with virtual vector support"
+	      flavor bool
+	      default_value 1
+	      implements  CYGINT_HAL_VIRTUAL_VECTOR_SUPPORT
+	      no_define
+	      define -file system.h IROS_VT
+	      description "This option is selected to build immenstar loader image with virtual vector support."
+       }
+
+
+       cdl_component IMST_MEM_LAYOUT {
+          display "ImmenStar Memory Layout"
+	  active_if CYGPKG_HAL_ARM_IMST
+	  flavor    bool
+	  default_value 1
+	  no_define
+	  description "ImmenStar boards memory layout"
+
+          cdl_option IMST_MIN_RAM_SIZE {
+              display       "Minimal ram size for immenstar loader to run"
+	      legal_values {2048 8192 16384 20480 32768 40960 49152 65536 81920 98304 131072 262144 524288 1048576}
+              flavor        data
+              default_value 2048
+	      no_define
+	      define -file system.h IMST_MIN_RAM_SIZE
+              description   "
+                At the very beginning, the loader checks ram size to make sure
+                there are minimal ram size available for exectuion properly.
+                When application starts, it check all ram. So, the loader does not
+                need to hard coded a ram size. This ram check happens before
+                stacks are setup, so only registers are allowed in this first stage
+                memory check."
+          }
+
+          cdl_option IMST_RAM_ORIGIN {
+              display       "Start address of ram"
+              flavor        data
+              default_value 0
+	      no_define
+	      define -file system.h IMST_RAM_ORIGIN
+              description   " starting address of ram region. used by memory map files."
+          }
+
+          cdl_option IMST_RAM_APP_START {
+              display       "Start address of ram application"
+              flavor        data
+              default_value 0
+	      no_define
+	      define -file system.h IMST_RAM_APP_START
+              description   " starting address of ram application. used by memory map files."
+          }
+
+          cdl_option IMST_RAM_APP_LEN {
+              display       "ram1 length"
+              flavor        data
+              default_value 122880
+	      no_define
+	      define -file system.h IMST_RAM_APP_LEN
+              description   " length of ram1 region in bytes. used by memory map files."
+          }
+
+          cdl_option IMST_RAM_LEN {
+              display       "ram length"
+              flavor        data
+	      legal_values {16384 32768 40960 65536 131072 262144 458752 524288 1048576 2097152 4194304}
+              default_value 65536
+	      no_define
+	      define -file system.h IMST_RAM_LEN
+              description   " length of ram region in bytes. used by memory map files."
+          }
+
+          cdl_option IMST_RAM_EXT_LEN {
+              display       "external ram length"
+              flavor        data
+	      legal_values {16384 32768 65536 131072 262144 458752 524288 1040384 1048576 1114112 1179648 1212416 1245184 1966080 2097152 2088960 2031616 3014656 4194304 41943040}
+              default_value 1048576
+	      no_define
+	      define -file system.h IMST_RAM_EXT_LEN
+              description   " length of external ram region in bytes. used by memory map files."
+          }
+
+          cdl_option IMST_RAM_EXT_START {
+              display       "Start address of exernal ram start"
+              flavor        data
+              default_value 0x22000000
+	      no_define
+	      define -file system.h IMST_RAM_EXT_START
+              description   " starting address of rom region. used by memory map files."
+          }
+
+
+          cdl_option IMST_ROM_ORIGIN {
+              display       "Start address of rom"
+              flavor        data
+              default_value 0x08000000
+	      no_define
+	      define -file system.h IMST_ROM_ORIGIN
+              description   " starting address of rom region. used by memory map files."
+          }
+
+          cdl_option IMST_ROM_LEN {
+              display       "rom length"
+              flavor        data
+	      legal_values {16384 32768 40960 45056 49152 65536 131072 262144}
+              default_value 32768
+	      no_define
+	      define -file system.h IMST_ROM_LEN
+              description   " length of rom region in bytes. used by memory map files."
+          }
+
+
+          cdl_option IMST_DEBUG_BUF_ORIG {
+              display       "Application debugging using circular buffer location"
+              flavor        data
+              default_value 0x0d400000
+	      no_define
+	      define -file system.h IMST_DEBUG_BUF_ORIG
+              description   "To support printf style debugging via IROS_DPRINTF to dump
+                             log information into a memory buffer."
+          }
+
+          cdl_option IMST_DEBUG_BUF_LEN {
+              display       "Application debugging using circular buffer size"
+              flavor        data
+              default_value 4096
+	      no_define
+	      define -file system.h IMST_DEBUG_BUF_LEN
+              description   "To support printf style debugging via IROS_DPRINTF to dump
+                             log information into a memory buffer."
+          }
+          cdl_option APP_BOOT_PARAMETERS_SIZE {
+              display       "IMST Application Boot Parameters Block Size"
+              flavor        data
+              default_value 32
+	      no_define
+	      define -file system.h APP_BOOT_PARAMETERS_SIZE
+              description   "To communicate between loader and app"
+          }
+    }
+
+
+    cdl_option BUILD_IROS_GDB_STUB {
+           display "Building immenstar ROM image with virtual vector support"
+           flavor bool
+	   default_value 1
+	   implements    CYGINT_HAL_DEBUG_GDB_STUBS
+	   implements    CYGINT_HAL_DEBUG_GDB_STUBS_BREAK
+           no_define
+	   description "This option is selected to build immenstar loader image with virtual vector support."
+    }
+
+    cdl_option IMST_NUM_OF_UARTS {
+          display       "Number of UARTS available on boards"
+	  flavor        data
+	  legal_values { 1 2 }
+	  default_value 2
+          no_define
+          define -file system.h IMST_NUM_OF_UARTS
+          description   "Number of UARTS available on boards"
+    }
+
+    cdl_component IMST_USE_CM_MISC_LED {
+           display "OLT/ONU evaluation board uses ARM Core Module MISC LED for debugging"
+           flavor bool
+	   default_value 0
+	   active_if { (CYG_HAL_ARM_IMST == "OLT_E") || \
+	               (CYG_HAL_ARM_IMST == "ONU_E") || \
+		       (CYG_HAL_ARM_IMST == "OLT_S") || \
+		       (CYG_HAL_ARM_IMST == "ONU_S") }
+	   define -file system.h IMST_USE_CM_MISC_LED
+	   description "OLT/ONU evaluation board uses ARM Core Module MISC LED for debugging"
+	   cdl_option IMST_USE_CM_MISC_LED_ON_LEN {
+	      display       "Number of cycles to have MISC LED on"
+              flavor        data
+              default_value 200000
+              no_define
+              define -file system.h IMST_USE_CM_MISC_LED_ON_LEN
+              description   "Number of cycles to have MISC LED on"
+	   }
+	   cdl_option IMST_USE_CM_MISC_LED_OFF_LEN {
+	      display       "Number of cycles to have MISC LED off"
+              flavor        data
+              default_value 400000
+              no_define
+              define -file system.h IMST_USE_CM_MISC_LED_OFF_LEN
+              description   "Number of cycles to have MISC LED off"
+	   }
+    }
+    cdl_option BUILD_IROS_LOADER {
+              display "This option is selected to build iROS loader."
+              flavor bool
+              default_value 0
+              no_define
+              define -file system.h IROS_LOADER
+              description "This option is selected to build iROS loader."
+         }
+
+
+    cdl_component CYG_HAL_UART {
+        display  "UART type"
+        flavor        data
+        legal_values  {"PRIMECELL" "IMST"}
+        default_value {"IMST"}
+        define -file system.h CYG_HAL_UART
+	description   "PRIMECELL UART or IMST Priepriatary UART"
+        cdl_option IMST_UART {
+              display "Immenstar UART"
+              flavor bool
+              default_value 1
+              active_if { CYG_HAL_UART == "IMST" }
+              define -file system.h IMST_UART
+        }
+        cdl_option PRIMECELL_UART {
+              display "PrimeCell UART"
+              flavor bool
+              default_value 1
+              active_if { CYG_HAL_UART == "PRIMECELL" }
+              define -file system.h PRIMECELL_UART
+        }
+    }
+
+    cdl_component CYG_HAL_ARM_IMST_PLAT {
+        display       "ImmenStar Board Type Platform"
+        flavor        data
+        legal_values  {"TIGER" "TIGER_PLUS" "LYNX" "LYNX_PLUS"}
+        default_value {"TIGER"}
+	    no_define
+	    define -file system.h IMST_PLAT
+    }
+
+    cdl_component CYG_HAL_ARM_IMST {
+        display       "ImmenStar Board Type"
+        flavor        data
+        legal_values  {"OLT_E" "OLT_A" "OLT_S" "ONU_E" "ONU_A" "OLT_S" }
+        default_value {"OLT_E"}
+	no_define
+	define -file system.h CYG_HAL_ARM_IMST
+
+	implements CYGINT_HAL_ARM_THUMB_ARCH
+
+        description   "
+           OLT_E: OLT Evaluation Board using FPGA
+           OLT_A: OLT using ASIC
+           OLT_S: OLT Chip simulator
+           ONU_E: ONU on Standalone CM
+           ONU_A: ONU using ASIC
+           ONU_S: ONU on Standalone CM"
+        cdl_option CYG_HAL_ARM_BIGENDIAN {
+           display "ARM Big-endian"
+           active_if { CYG_HAL_ARM_ENDIAN == "BIG_ENDIAN" }
+           calculated { CYG_HAL_ARM_ENDIAN == "BIG_ENDIAN" }
+           implements CYGINT_HAL_ARM_BIGENDIAN
+        }
+
+	cdl_option CYG_HAL_ARM_IMST_ONU {
+	      display "Board major type ONU"
+              flavor bool
+
+           implements CYGHWR_NET_DRIVERS
+           implements CYGHWR_NET_DRIVER_ETH0
+           implements CYGINT_DEVS_FLASH_INTEL_28FXXX_REQUIRED
+
+
+	      default_value 1
+              active_if {(CYG_HAL_ARM_IMST == "ONU_A") ||
+                         (CYG_HAL_ARM_IMST == "ONU_E") ||
+                         (CYG_HAL_ARM_IMST == "ONU_S")
+	                }
+              no_define
+              define -file system.h CYG_HAL_ARM_IMST_ONU
+        }
+
+	cdl_option CYG_HAL_ARM_IMST_OLT {
+	      display "Board major type OLT"
+              flavor bool
+	      default_value 1
+              active_if {(CYG_HAL_ARM_IMST == "OLT_A") ||
+                         (CYG_HAL_ARM_IMST == "OLT_E") ||
+                         (CYG_HAL_ARM_IMST == "OLT_S")
+	                }
+              no_define
+              define -file system.h CYG_HAL_ARM_IMST_OLT
+        }
+
+	cdl_option CYG_HAL_ARM_IMST_ASIC {
+	      display "Board using ASIC"
+              flavor bool
+	      default_value 1
+              active_if {(CYG_HAL_ARM_IMST == "OLT_A") ||
+                         (CYG_HAL_ARM_IMST == "ONU_A")
+	                }
+              no_define
+              define -file system.h CYG_HAL_ARM_IMST_ASIC
+        }
+
+
+	cdl_option CYG_HAL_ARM_IMST_FPGA {
+	      display "Board using FPGA"
+              flavor bool
+	      default_value 1
+              active_if {(CYG_HAL_ARM_IMST == "OLT_E") ||
+                         (CYG_HAL_ARM_IMST == "ONU_E")
+	                }
+              no_define
+              define -file system.h CYG_HAL_ARM_IMST_FPGA
+        }
+
+	cdl_option CYG_HAL_ARM_IMST_DEV_FREQ {
+	      display "Periphery frequenecy"
+              flavor data
+	      calculated { CYG_HAL_ARM_IMST_FPGA && CYG_HAL_ARM_IMST == "OLT_E"? 25000000 :
+			   CYG_HAL_ARM_IMST_FPGA && CYG_HAL_ARM_IMST == "ONU_E"? 25000000 :
+	                   CYG_HAL_ARM_IMST_ASIC? 62500000 : 0 }
+              define -file system.h CYG_HAL_ARM_IMST_DEV_FREQ
+	}
+
+	cdl_option CYG_HAL_ARM_IMST_CM {
+	      display "Board on standalone ARM CM"
+              flavor bool
+	      default_value 1
+              active_if {(CYG_HAL_ARM_IMST == "OLT_S") ||
+                         (CYG_HAL_ARM_IMST == "ONU_S")
+	                }
+              no_define
+              define -file system.h CYG_HAL_ARM_IMST_CM
+        }
+
+	cdl_option CYG_HAL_ARM_IMST_STANDALONE_TEST {
+	      display "Start test small program without eCos setup"
+              flavor bool
+	      default_value 0
+              no_define
+              define -file system.h CYG_HAL_ARM_IMST_STANDALONE_TEST
+        }
+
+    }
+
+    cdl_component CYG_HAL_STARTUP {
+        display       "Startup type"
+        flavor        data
+        legal_values  {"RAM" "ROM" "ROMRAM"}
+        default_value {"RAM"}
+	no_define
+	define -file system.h CYG_HAL_STARTUP
+        description   "
+            When targetting the IMST eval board it is possible to build
+            the system for either RAM bootstrap or ROM bootstrap(s). Select
+            'ram' when building programs to load into RAM using onboard
+            debug software such as Angel or eCos GDB stubs.  Select 'rom'
+            when building a stand-alone application which will be put
+            into ROM."
+
+
+    }
+
+
+
+    cdl_option CYGNUM_HAL_VIRTUAL_VECTOR_CONSOLE_CHANNEL_DEFAULT {
+        display      "Default console channel."
+        flavor       data
+        calculated   0
+    }
+
+    cdl_option CYGNUM_HAL_VIRTUAL_VECTOR_CONSOLE_CHANNEL_BAUD {
+        display       "Diagnostic serial port baud rate"
+        flavor        data
+        legal_values  9600 19200 38400 115200
+        default_value 38400
+        description   "
+            This option selects the baud rate used for the diagnostic port.
+            Note: this should match the value chosen for the GDB port if the
+            diagnostic and GDB port are the same."
+    }
+
+    cdl_option CYGNUM_HAL_VIRTUAL_VECTOR_DEBUG_CHANNEL_BAUD {
+        display       "GDB serial port baud rate"
+        flavor        data
+        legal_values  9600 19200 38400 115200
+        default_value 38400
+        description   "
+            This option controls the baud rate used for the GDB connection."
+    }
+
+    cdl_option CYGHWR_HAL_ARM_IMST_DIAG_LEDS {
+        display          "Enable use of PPx LEDs"
+        default_value    1
+        description      "
+            Enabling this option causes eCos to flash the LEDs during
+            early board initialization. See vectors.S for
+            details. Before calling cyg_start, PP0 is switched on,
+            PP1-3 are switched off. The application code can use the
+            function hal_diag_led() to control the LEDs after this
+            point."
+   }
+
+    cdl_option CYGNUM_HAL_VIRTUAL_VECTOR_COMM_CHANNELS {
+        display      "Number of communication channels on the board"
+        flavor       data
+        calculated   2
+    }
+
+    cdl_option CYGNUM_HAL_VIRTUAL_VECTOR_DEBUG_CHANNEL {
+        display          "Debug serial port"
+        active_if        CYGPRI_HAL_VIRTUAL_VECTOR_DEBUG_CHANNEL_CONFIGURABLE
+        flavor 		 data
+        legal_values     0 to CYGNUM_HAL_VIRTUAL_VECTOR_COMM_CHANNELS-1
+        default_value    0
+        description      "
+            The IMST board has two serial ports. This option
+            chooses which port will be used to connect to a host
+            running GDB."
+     }
+
+     cdl_option CYGNUM_HAL_VIRTUAL_VECTOR_CONSOLE_CHANNEL {
+         display          "Diagnostic serial port"
+         active_if        CYGPRI_HAL_VIRTUAL_VECTOR_CONSOLE_CHANNEL_CONFIGURABLE
+         flavor data
+         legal_values     0 to CYGNUM_HAL_VIRTUAL_VECTOR_COMM_CHANNELS-1
+         default_value    CYGNUM_HAL_VIRTUAL_VECTOR_CONSOLE_CHANNEL_DEFAULT
+         description      "
+            The IMST board has two serial ports.  This option
+            chooses which port will be used for diagnostic output."
+     }
+
+    # Real-time clock/counter specifics : TBD
+
+    cdl_component CYGNUM_HAL_RTC_CONSTANTS {
+        display       "Real-time clock constants"
+        flavor        none
+
+        cdl_option CYGNUM_HAL_RTC_NUMERATOR {
+            display       "Real-time clock numerator. nsecs per sec"
+            flavor        data
+	    calculated    {1000000000}
+        }
+        cdl_option CYGNUM_HAL_RTC_DENOMINATOR {
+            display       "Real-time clock denominator. 1000 ticks per sec"
+            flavor        data
+	    calculated    { 1000 }
+        }
+        cdl_option CYGNUM_HAL_RTC_PERIOD {
+            display       "Real-time clock period. 1 msecs per tick. scale64"
+            flavor        data
+	    #calculated     { (10000 * CYG_HAL_ARM_IMST_DEV_FREQ / 1000000)/64 }
+	    #1ms scale1
+	    calculated     {(1000 * CYG_HAL_ARM_IMST_DEV_FREQ / 1000000)}
+	    #50us scale1
+	    #calculated     {(50 * CYG_HAL_ARM_IMST_DEV_FREQ / 1000000)}
+        }
+    }
+
+    cdl_component CYGBLD_GLOBAL_OPTIONS {
+        display "Global build options"
+        flavor  none
+        parent  CYGPKG_NONE
+        description   "
+	    Global build options including control over
+	    compiler flags, linker flags and choice of toolchain."
+
+
+        cdl_option CYGBLD_GLOBAL_COMMAND_PREFIX {
+            display "Global command prefix"
+            legal_values  {"arm-elf" "arm-coff"}
+            flavor  data
+            no_define
+            default_value { "arm-elf" }
+            description "
+                This option specifies the command prefix used when
+                invoking the build tools."
+        }
+
+        cdl_option CYGBLD_GLOBAL_EXTRA_CFLAGS {
+            display "Global command extra cflags"
+            flavor  data
+            no_define
+            default_value { " -O2 " }
+            description "
+                This option specifies the extra compiling CFLAGS used when
+                invoking the build tools."
+        }
+
+        cdl_option CYGBLD_GLOBAL_CFLAGS {
+	    display "Global compiler flags"
+            flavor  data
+            no_define
+
+	    calculated { (CYGHWR_HAL_ARM_BIGENDIAN ? "-mbig-endian ": "") .
+		         (CYGPKG_HAL_ARM_IMST_ARM9 ? "-mcpu=arm9 ":  "-mcpu=arm7tdmi ") .
+			 (CYGHWR_THUMB ? "-mthumb " : "") .
+			 (CYGBLD_ARM_ENABLE_THUMB_INTERWORK ? "-mthumb-interwork " : "") .
+			 (CYGBLD_GLOBAL_EXTRA_CFLAGS) .
+			 " -Wall -Wstrict-prototypes -Wpointer-arith -Winline -Wundef  -g -ffunction-sections   -fno-exceptions -fno-rtti -fno-exceptions -fvtable-gc"
+  	    }
+
+            description   "
+                This option controls the global compiler flags which are used to
+                compile all packages by default. Individual packages may define
+                options which override these global flags."
+        }
+
+        cdl_option CYGBLD_GLOBAL_LDFLAGS {
+            display "Global linker flags"
+            flavor  data
+            no_define
+
+            calculated { (CYGHWR_HAL_ARM_BIGENDIAN ? "-mbig-endian ": "") .
+                         (CYGPKG_HAL_ARM_IMST_ARM9 ? "-mcpu=arm9 ":  "-mcpu=arm7tdmi ") .
+			 (CYGHWR_THUMB ? "-mthumb " : "") .
+			 (CYGBLD_ARM_ENABLE_THUMB_INTERWORK ? "-mthumb-interwork " : "") .
+			 "-Wl,-Map,map  -g -nostdlib -Wl,--gc-sections -Wl,-static"
+	    }
+
+            description   "
+                This option controls the global linker flags. Individual
+                packages may define options which override these global flags."
+        }
+
+        cdl_option CYGBLD_BUILD_GDB_STUBS {
+            display "Build GDB stub ROM image"
+            default_value 0
+            requires CYGBLD_BUILD_COMMON_GDB_STUBS
+            requires { CYG_HAL_STARTUP != "RAM" }
+            requires CYGSEM_HAL_ROM_MONITOR
+            requires CYGDBG_HAL_DEBUG_GDB_INCLUDE_STUBS
+            requires CYGDBG_HAL_DEBUG_GDB_BREAK_SUPPORT
+            requires CYGDBG_HAL_DEBUG_GDB_THREAD_SUPPORT
+            requires ! CYGDBG_HAL_COMMON_INTERRUPTS_SAVE_MINIMUM_CONTEXT
+            requires ! CYGDBG_HAL_COMMON_CONTEXT_SAVE_MINIMUM
+            no_define
+            description "
+                This option enables the building of the GDB stubs for the
+                board. The address of the ELF headers in the image are
+                adjusted to ensure loading at an address in memory used
+                by the flash tool."
+
+            make -priority 320 {
+                <PREFIX>/bin/gdb_module.bin : <PREFIX>/bin/gdb_module.img
+                @mv $< $(<:.img=.elf)
+                $(OBJCOPY) --strip-debug --change-addresses=0xFC060000 $(<:.img=.elf) $<
+                $(OBJCOPY) -O binary $(<:.img=.elf) $@
+            }
+        }
+
+        cdl_option CYGBLD_BUILD_FLASH_TOOL {
+            display "Build flash programming tool"
+            default_value 0
+            requires { CYG_HAL_STARTUP == "RAM" }
+            requires CYGNUM_HAL_VIRTUAL_VECTOR_CONSOLE_CHANNEL == 1
+            requires CYGPKG_LIBC
+            requires CYGPKG_KERNEL
+            no_define
+            description "This option enables the building of the flash programming tool for copying the GDB stubs into flash memory."
+            make -priority 320 {
+                <PREFIX>/bin/prog_flash.img : <PACKAGE>/src/prog_flash.c
+                @sh -c "mkdir -p src $(dir $@)"
+                $(CC) -c $(INCLUDE_PATH) -Wp,-MD,deps.tmp -I$(dir $<) $(CFLAGS) -o src/prog_flash.o $<
+                @echo $@ ": \\" > $(notdir $@).deps
+                @echo $(wildcard $(PREFIX)/lib/*) " \\" >> $(notdir $@).deps
+                @tail +2 deps.tmp >> $(notdir $@).deps
+                @echo >> $(notdir $@).deps
+                @rm deps.tmp
+                $(CC) $(LDFLAGS) -L$(PREFIX)/lib -Ttarget.ld -o $@ src/prog_flash.o
+            }
+        }
+
+        cdl_option CYGBLD_BUILD_FLASH_TOOL_BE {
+            display "Build flash programming tool for BE images on LE boards"
+            default_value 0
+            requires { CYG_HAL_STARTUP == "RAM" }
+            requires CYGNUM_HAL_VIRTUAL_VECTOR_CONSOLE_CHANNEL == 1
+            requires CYGPKG_LIBC
+            requires CYGPKG_KERNEL
+            no_define
+            description "This option enables the building of the flash
+                         programming tool for copying the GDB stubs
+                         into flash memory. The tool built by enabling
+                         this option must be used when programming BE
+                         images on LE boards."
+            make -priority 320 {
+                <PREFIX>/bin/prog_flash_BE_image_LE_system.img : <PACKAGE>/src/prog_flash.c
+                @sh -c "mkdir -p src $(dir $@)"
+                $(CC) -DBE_IMAGE -c $(INCLUDE_PATH) -Wp,-MD,deps.tmp -I$(dir $<) $(CFLAGS) -o src/prog_flash_be.o $<
+                @echo $@ ": \\" > $(notdir $@).deps
+                @echo $(wildcard $(PREFIX)/lib/*) " \\" >> $(notdir $@).deps
+                @tail +2 deps.tmp >> $(notdir $@).deps
+                @echo >> $(notdir $@).deps
+                @rm deps.tmp
+                $(CC) $(LDFLAGS) -L$(PREFIX)/lib -Ttarget.ld -o $@ src/prog_flash_be.o
+            }
+        }
+    }
+
+    cdl_component CYGHWR_MEMORY_LAYOUT {
+        display "Memory layout"
+        flavor data
+        no_define
+
+        cdl_option CYGHWR_MEMORY_LAYOUT_LDI {
+            display "Memory layout linker script fragment"
+            flavor data
+            no_define
+            define -file system.h CYGHWR_MEMORY_LAYOUT_LDI
+            calculated {
+                         BUILD_IROSBOOT ? "<pkgconf/mlt_arm_imst_loader.ldi>": \
+			 BUILD_ROM_APP ? "<pkgconf/mlt_arm_imst_rom_app.ldi>": \
+			 CYG_HAL_STARTUP  == "ROM"    ? "<pkgconf/mlt_arm_imst_rom.ldi>" : \
+			 CYG_HAL_STARTUP  == "RAM"    ? "<pkgconf/mlt_arm_imst_ram.ldi>" : "error" }
+
+        }
+
+        cdl_option CYGHWR_MEMORY_LAYOUT_H {
+            display "Memory layout header file"
+            flavor data
+            no_define
+            define -file system.h CYGHWR_MEMORY_LAYOUT_H
+            calculated {
+                         BUILD_IROSBOOT ? "<pkgconf/mlt_arm_imst_loader.h>": \
+                         BUILD_ROM_APP ? "<pkgconf/mlt_arm_imst_rom_app.h>": \
+			 CYG_HAL_STARTUP  == "ROM"    ? "<pkgconf/mlt_arm_imst_rom.h>" : \
+			 CYG_HAL_STARTUP  == "RAM"    ? "<pkgconf/mlt_arm_imst_ram.h>" : "error" }
+        }
+    }
+
+
+    cdl_option CYGSEM_HAL_ROM_MONITOR {
+        display       "Behave as a ROM monitor"
+        flavor        bool
+        default_value 0
+        parent        CYGPKG_HAL_ROM_MONITOR
+        requires      { CYG_HAL_STARTUP != "RAM" }
+        description   "
+            Enable this option if this program is to be used as a ROM monitor,
+            i.e. applications will be loaded into RAM on the board, and this
+            ROM monitor may process exceptions or interrupts generated from the
+            application. This enables features such as utilizing a separate
+            interrupt stack when exceptions are generated."
+    }
+
+    cdl_component CYGPKG_CYGMON_HAL_OPTIONS {
+        display       "CygMon HAL options"
+        flavor        none
+        no_define
+        parent        CYGPKG_CYGMON
+        active_if     CYGPKG_CYGMON
+        description   "
+            This option also lists the target's requirements for a valid CygMon
+            configuration."
+
+        cdl_option CYGBLD_BUILD_CYGMON_BIN {
+            display       "Build CygMon ROM binary image"
+            active_if     CYGBLD_BUILD_CYGMON
+            default_value 1
+            no_define
+            description "This option enables the conversion of the CygMon ELF
+                         image to a binary image suitable for ROM programming."
+
+            make -priority 325 {
+                <PREFIX>/bin/cygmon.bin : <PREFIX>/bin/cygmon.elf
+                $(OBJCOPY) --strip-debug --change-addresses=0xFC060000 $< $(@:.bin=.img)
+                $(OBJCOPY) -O srec $< $(@:.bin=.srec)
+                $(OBJCOPY) -O binary $< $@
+            }
+        }
+    }
+
+    cdl_option CYGSEM_HAL_USE_ROM_MONITOR {
+         display       "Work with a ROM monitor"
+         flavor        booldata
+         legal_values  { "Generic" "GDB_stubs" }
+         default_value { CYG_HAL_STARTUP == "RAM" ? "GDB_stubs" : 0 }
+         parent        CYGPKG_HAL_ROM_MONITOR
+         requires      { CYG_HAL_STARTUP == "RAM" }
+         description   "
+             Support can be enabled for different varieties of ROM monitor.
+             This support changes various eCos semantics such as the encoding
+             of diagnostic output, or the overriding of hardware interrupt
+             vectors.
+             Firstly there is \"Generic\" support which prevents the HAL
+             from overriding the hardware vectors that it does not use, to
+             instead allow an installed ROM monitor to handle them. This is
+             the most basic support which is likely to be common to most
+             implementations of ROM monitor.
+             \"GDB_stubs\" provides support when GDB stubs are included in
+             the ROM monitor or boot ROM."
+     }
+
+
+
+    cdl_component CYGPKG_REDBOOT_HAL_OPTIONS {
+        display       "Redboot HAL options"
+        flavor        none
+        no_define
+        parent        CYGPKG_REDBOOT
+        active_if     CYGPKG_REDBOOT
+        description   "
+            This option lists the target's requirements for a valid Redboot
+            configuration."
+
+	requires      { !CYGPKG_REDBOOT_FLASH || (CYGBLD_REDBOOT_MIN_IMAGE_SIZE == 0x40000) }
+	requires      { !CYGOPT_REDBOOT_FIS_REDBOOT_BACKUP }
+
+        cdl_option CYGBLD_BUILD_REDBOOT_BIN_ROM {
+            display       "Build Redboot ROM startup ROM binary image"
+            active_if     { CYGBLD_BUILD_REDBOOT && CYG_HAL_STARTUP == "ROM" }
+            default_value 1
+            no_define
+            description "This option enables the conversion of the Redboot ELF
+                         image to S-Record and binary image suitable for ROM
+                         programming."
+
+            make -priority 325 {
+                <PREFIX>/bin/redboot.bin : <PREFIX>/bin/redboot.elf
+                $(OBJCOPY) --strip-debug $< $(@:.bin=.img)
+                $(OBJCOPY) -O srec --gap-fill 0 $< $(@:.bin=.srec)
+                $(OBJCOPY) -O binary $< $@
+            }
+        }
+
+        cdl_option CYGBLD_BUILD_REDBOOT_BIN_ROMRAM {
+            display       "Build Redboot ROMRAM startup ROM binary image"
+            active_if     { CYGBLD_BUILD_REDBOOT && CYG_HAL_STARTUP == "ROMRAM" }
+            default_value 1
+            no_define
+            description "This option enables the conversion of the Redboot ELF
+                         image to S-Record and binary images suitable for ROM
+                         programming."
+
+            make -priority 325 {
+                <PREFIX>/bin/redboot.bin : <PREFIX>/bin/redboot.elf
+                $(OBJCOPY) --strip-debug $< $(@:.bin=.img)
+                $(OBJCOPY) -O srec --adjust-vma 0x24000000 --gap-fill 0 $< $(@:.bin=.srec)
+                $(OBJCOPY) -O binary $< $@
+            }
+        }
+
+
+    }
+
+    cdl_component IMST_PIN_CTRL_SIM {
+         display "OLT/ONU PIN Control register simulation"
+         parent  CYGPKG_NONE
+         flavor bool
+         default_value 0
+         no_define
+         define -file system.h IMST_PIN_CTRL_SIM
+         description "This option ..."
+
+         cdl_option IMST_PIN_CTRL_REG_SIM {
+              display       "Address of pin control reg if sim"
+              flavor        data
+              default_value {CYGPKG_HAL_ARM_IMST_ARM9 ? 0x08008080: 0x00808080 }
+              no_define
+              define -file system.h IMST_PIN_CTRL_REG_SIM
+              description   " ... "
+          }
+
+    }
+
+    cdl_component IMST_EEPROM_SIM {
+         display "OLT/ONU EEPROM Sim"
+         parent  CYGPKG_NONE
+         flavor bool
+         default_value 0
+         no_define
+         define -file system.h IMST_EEPROM_SIM
+         description "This option ..."
+
+         cdl_option IMST_EEPROM_BASE_SIM {
+              display       "Address of eeprom base if sim upto 128B"
+              flavor        data
+              default_value {CYGPKG_HAL_ARM_IMST_ARM9 ? 0x08008000: 0x00808000 }
+              no_define
+              define -file system.h IMST_EEPROM_BASE_SIM
+              description   " ... "
+          }
+
+    }
+
+    cdl_component IMST_SERIAL_FLASH_SIM {
+         display "OLT/ONU serial flash sim"
+         parent  CYGPKG_NONE
+         flavor bool
+         default_value 0
+         no_define
+         define -file system.h IMST_SERIAL_FLASH_SIM
+         description "This option ..."
+
+         cdl_option IMST_SERIAL_FLASH_BASE_SIM {
+              display       "Address of serial base if sim upto 128KB"
+              flavor        data
+              default_value {CYGPKG_HAL_ARM_IMST_ARM9 ? 0x08010000: 0x00810000 }
+              no_define
+              define -file system.h IMST_SERIAL_FLASH_SIM
+              description   " ... "
+          }
+
+    }
+
+    cdl_component IMST_PARALLEL_FLASH_SIM {
+         display "OLT/ONU Parallel Flash Sim"
+         parent  CYGPKG_NONE
+         flavor bool
+         default_value 0
+         no_define
+         define -file system.h IMST_PARALLEL_FLASH_SIM
+         description "This option ..."
+
+         cdl_option IMST_PARALLEL_FLASH_BASE_SIM {
+              display       "Address of parallel flash base if sim upto 4MB"
+              flavor        data
+              default_value {CYGPKG_HAL_ARM_IMST_ARM9 ? 0x08200000: 0x00A00000 }
+              no_define
+              define -file system.h IMST_PARALLEL_FLASH_BASE_SIM
+              description   " ... "
+          }
+
+    }
+
+    cdl_component IMST_PARALLEL_FLASH {
+        display       "Parallel Flash type"
+        flavor        data
+        legal_values  {"INTEL_28F320"}
+        default_value {"INTEL_28F320"}
+	no_define
+	define -file system.h IMST_PARALLEL_FLASH
+
+        description   "Parallel Flash Type"
+     }
+
+}

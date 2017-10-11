@@ -1,0 +1,79 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Loading.....</title>
+<style type="text/css">
+    <!--
+    body {
+        margin-left: 0px;
+        margin-top: 0px;
+        margin-right: 0px;
+        margin-bottom: 0px;
+    }
+    -->
+</style>
+
+<script language="JavaScript" type="text/javascript">
+var g_lock = 0;
+function showLoading()
+{
+    if (g_lock > 0) 
+        return;
+    g_lock = 1;
+	var cw = document.documentElement.clientWidth;
+	var ch = document.documentElement.clientHeight;
+	var div_load = document.getElementById("div_loading");
+	var td_load  = document.getElementById("td_loading");
+	try
+	{
+		if (top.g_top > 0)
+		{
+			div_load.width = 580;
+			td_load.height = ch - top.g_top ;
+		}
+		else
+		{
+			div_load.width = cw;
+			td_load.height = ch;
+		}
+	}
+    catch(e){
+    
+    }
+	g_lock = 0;
+}
+
+setInterval("showLoading();", 100);
+
+window.onresize = showLoading;
+
+window.onload = function()
+{
+	showLoading();
+	try
+	{
+		top.initSystem();
+	}
+    catch(E){
+
+    }
+}
+</script>
+
+</head>
+<body>
+    <table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0" id="div_loading">
+        <tr>
+            <td align="center" valign="middle" width="100%" id="td_loading">
+                <table border="0" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td align="right"><img src="img/animated_loading.gif" width="32" height="32" id="burn_img" /></td>
+                        <td><strong id="txt_step">Loading .....</strong></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
+

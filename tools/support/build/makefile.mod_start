@@ -1,0 +1,31 @@
+MOD_HOME=$(shell pwd)
+
+# store object files and result in the same place as module source
+MOD_TMPHOME=$(MOD_HOME)
+
+# any modular specific stuff are defined here
+ifndef MOD_CFLAGS
+MOD_CFLAGS=-DSW_DEBUG
+endif
+
+MOD_INCLUDES:=-I$(ECOS_INSTALL_HOME)/include \
+-I../. \
+-I$(SWHOME)/src/include $(MOD_INCLUDES) \
+-I$(SWHOME)/src/sc/imst/iros/include \
+-I$(SWHOME)/src/sc/imst/include \
+
+ifndef MOD_LDFLAGS
+MOD_LDFLAGS=
+endif
+
+include $(SWHOME)/tools/support/build/makefile.mod_compile
+
+
+
+
+
+
+
+
+
+

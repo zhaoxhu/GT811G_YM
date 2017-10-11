@@ -1,0 +1,560 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>System Overview</title>
+<link href="css/stylemain.css" rel="stylesheet" type="text/css">
+<script language="javascript" type="text/javascript" src="js/prototype.js"></script>
+<script language="JavaScript" type="text/javascript">
+    var page_lang = [ 
+        {
+            title:"System Overview",
+			innerHTML:
+			{
+			    in_hd:"System Overview",
+			    in_software_version:"Software Version:",
+			    in_td_type:"Type:",
+			    in_td_onu_conn_st:"ONU PON Connection State:",
+			    in_td_reg_st:"Register Status:",
+			    in_td_oam_link:"OAM Link:",
+			    in_td_auth_st:"Authorization State:",
+			    in_td_pon_loopback:"PON Loopback:",
+			    in_td_olt_mac:"OLT MAC Address:",
+			    in_td_llid:"LLID:",
+			    in_td_uptime:"ONU Uptime",
+			    in_td_onu_ip:"ONU IP Address:",
+			    in_td_onu_netmask:"ONU Subnet Mask:",
+			    in_td_onu_mac:"ONU MAC Address:",
+			    in_td_flash_chksum:"Flash Checksum:",
+			    in_td_eeprom_chksum:"EEPROM Checksum:",
+			    in_td_app_ver:"Software Version:",
+			    in_td_ctc_spec_ver:"CTC Spec Version:",
+			    in_td_hw_ver:"Hardware Version:",
+			    in_td_oam_ver:"OAM Version:",
+			    in_onu_sn:"ONU SN",
+			    in_td_onu_vendor_id:"Vendor ID:",
+			    in_td_onu_model:"ONU Model:",
+			    in_td_onu_id:"ONU ID:",
+			    in_td_onu_hw_ver:"Hardware Version:",
+			    in_td_onu_soft_ver:"Software Version:",
+			    in_td_onu_fm_ver:"Firmware Version:",
+			    in_chip_id:"Chipset ID",
+			    in_td_chipset_vendor_id:"Vendor ID:",
+			    in_td_chipset_chip_model:"Chip Model:",
+			    in_td_chipset_rev:"Revision:",
+			    in_td_chipset_ic_ver:"IC Version/Date:",
+			    in_onu_capa:"ONU Capabilities",
+			    in_td_capabi_service_supported:"Service Supported:",
+			    in_td_capabi_ge_num:"Number of GE Ports:",
+			    in_td_capabi_ge_bitmap:"Bitmap of GE Ports:",
+			    in_td_capabi_fe_num:"Number of FE Ports:",
+			    in_td_capabi_fe_bitmap:"Bitmap of FE Ports:",
+			    in_td_capabi_pots_num:"Number of POTS ports:",
+			    in_td_capabi_e1_num:"Number of E1 port:",
+			    in_td_capabi_us_que_num:"Number of US Queues:",
+			    in_td_capabi_max_us_queue:"QueueMax per US Port:",
+			    in_td_capabi_ds_que_num:"Number of DS Queues:",
+			    in_td_capabi_max_ds_queue:"QueueMax per DS Port:",
+			    in_td_capabi_battery_backup:"Battery Backup:",
+			    in_td_afec_ability:"FEC Ability:",
+			    in_td_fec_mode:"FEC mode:"
+			},
+			js_string:
+			{
+			    onu_conn_st_arr:
+			    [
+			        "Disconnected",
+			        "Connected"
+			    ],
+			    reg_st_arr:
+			    [
+			        "Deregistered",
+			        "Registered"
+			    ],
+			    oam_link_arr:
+			    [
+			        "DOWN",
+			        "UP"
+			    ],
+			    auth_st_arr:
+			    [
+			        "Unauthorized",
+			        "Authorized"
+			    ],
+			    uptime_arr:
+			    [
+			        "days",
+			        "hours",
+			        "minutes",
+			        "seconds"
+			    ],
+			    oam_ver_arr:
+			    [
+			        "Draft 2.0",
+			        "Standard"
+			    ],
+			    battery_arr:
+			    [
+			        "NO",
+			        "YES"
+			    ],
+			    afec_ability_arr:
+			    [
+			        "",
+			        "Unknown",
+			        "Supported",
+			        "Unsupported"
+			    ],
+			    fec_mode_arr:
+			    [
+			        "",
+			        "Unknown",
+			        "Enabled",
+			        "Disabled"
+                ]
+            }
+        },
+        {
+            title:"系统状态",
+			innerHTML:
+			{
+			    in_hd:"系统状态",
+			    in_software_version:"软件版本:",
+			    in_td_type:"型号:",
+			    in_td_onu_conn_st:"PON连接状态",
+			    in_td_reg_st:"注册状态:",
+			    in_td_oam_link:"OAM 连接:",
+			    in_td_auth_st:"认证状态",
+			    in_td_pon_loopback:"PON回环:",
+			    in_td_olt_mac:"OLT MAC地址:",
+			    in_td_llid:"LLID:",
+			    in_td_uptime:"ONU运行时间:",
+			    in_td_onu_ip:"ONU IP地址:",
+			    in_td_onu_netmask:"ONU子网掩码:",
+			    in_td_onu_mac:"ONU MAC地址:",
+			    in_td_flash_chksum:"Flash校验和:",
+			    in_td_eeprom_chksum:"EEPROM校验和:",
+			    in_td_app_ver:"软件版本:",
+			    in_td_ctc_stack_ver:"CTC协议栈版本",
+			    in_td_ctc_spec_ver:"CTC规范版本:",
+			    in_td_hw_ver:"硬件版本:",
+			    in_td_fm_ver:"固件版本:",
+			    in_td_oam_ver:"OAM版本:",
+			    in_onu_sn:"ONU序列号",
+			    in_td_onu_vendor_id:"厂商ID:",
+			    in_td_onu_model:"ONU Model:",
+			    in_td_onu_id:"ONU ID:",
+			    in_td_onu_hw_ver:"硬件版本:",
+			    in_td_onu_soft_ver:"软件版本:",
+			    in_td_onu_fm_ver:"固件版本:",
+			    in_chip_id:"芯片编号",
+			    in_td_chipset_vendor_id:"厂商编号:",
+			    in_td_chipset_chip_model:"芯片Model:",
+			    in_td_chipset_rev:"修订:",
+			    in_td_chipset_ic_ver:"IC版本/日期:",
+			    in_onu_capa:"ONU性能",
+			    in_td_capabi_service_supported:"支持的服务:",
+			    in_td_capabi_ge_num:"千兆端口数量:",
+			    in_td_capabi_ge_bitmap:"千兆端口分布:",
+			    in_td_capabi_fe_num:"百兆端口数量:",
+			    in_td_capabi_fe_bitmap:"百兆端口分布:",
+			    in_td_capabi_pots_num:"POTS端口数量:",
+			    in_td_capabi_e1_num:"E1端口数量:",
+			    in_td_capabi_us_que_num:"上行队列数:",
+			    in_td_capabi_max_us_queue:"每端口上行最大队列数:",
+			    in_td_capabi_ds_que_num:"下行队列数:",
+			    in_td_capabi_max_ds_queue:"每端口下行最大队列数:",
+			    in_td_capabi_battery_backup:"备用电池:",
+			    in_td_afec_ability:"前向纠错能力:",
+			    in_td_fec_mode:"前向纠错状态:"
+			},
+			js_string:
+			{
+				onu_conn_st_arr:
+				[
+				    "断开",
+				    "连接"
+				],
+				reg_st_arr:
+				[
+				    "注销",
+				    "注册"
+				],
+				oam_link_arr:
+				[
+				    "断开",
+				    "连接"
+				],
+				auth_st_arr:
+				[
+				    "未认证",
+				    "认证"
+				],
+				uptime_arr:
+				[
+				    "日",
+				    "小时",
+				    "分",
+				    "秒"
+				],
+				oam_ver_arr:
+				[
+				    "草案 2.0",
+				    "标准"
+				],
+				battery_arr:
+				[
+				    "无",
+				    "有"
+				],
+				afec_ability_arr:
+				[
+				    "",
+				    "未知",
+				    "支持",
+				    "不支持"
+				],
+				fec_mode_arr:
+				[
+				    "",
+				    "未知",
+				    "激活",
+				    "禁用"
+				]
+	    	}
+        }
+    ];
+	var html_loading= "";
+	var onu_conn_st_arr = null;
+	var reg_st_arr	= null;
+	var oam_link_arr = null;
+	var auth_st_arr = null;
+	var disable_arr = null;
+	var uptime_arr	= null;
+	var oam_ver_arr = null;
+	var battery_arr = null;
+	var afec_ability_arr=  null;
+	var fec_mode_arr = null;
+
+	function chgLanguage()
+    {
+        var index = top.get_lang_index();
+        change_language(top.g_lang);
+        change_language(page_lang[index]);
+
+		onu_conn_st_arr = page_lang[index].js_string.onu_conn_st_arr;
+		reg_st_arr	= page_lang[index].js_string.reg_st_arr;
+		oam_link_arr = page_lang[index].js_string.oam_link_arr;
+		auth_st_arr = page_lang[index].js_string.auth_st_arr;
+		disable_arr = top.g_lang.js_string.disable_enable;
+		uptime_arr	= page_lang[index].js_string.uptime_arr;
+		oam_ver_arr = page_lang[index].js_string.oam_ver_arr;
+		battery_arr = page_lang[index].js_string.battery_arr;
+		afec_ability_arr= page_lang[index].js_string.afec_ability_arr;
+		fec_mode_arr = page_lang[index].js_string.fec_mode_arr;
+	}
+	window.onload = function()
+	{
+		
+		top.g_cur_main_url = window.location.href;
+		chgLanguage();
+		
+		var tr_arr = new Array(
+			"tr_onu_conn_st",
+			"tr_bank_00",
+			"tr_oam_link",
+			"tr_auth_st",
+			"tr_pon_loopback",
+			"tr_olt_mac",
+			"tr_bank_01",
+			"tr_bank_02",
+			"tr_ctc_spec_ver",
+			"tr_hw_ver",
+			"tr_oam_ver");
+		
+		for (var i=0; i<tr_arr.length; i++)
+		{
+			try
+			{
+				displayObj($(tr_arr[i]), false);
+			}
+			catch(E){}
+		}
+		
+		$("page_body").style.visibility = "visible";
+		html_loading = $("div_loading").innerHTML;
+		getSysInfo();
+		$("bt_refresh").onclick = getSysInfo;
+		
+    }
+
+	function getSysInfo()
+	{
+		$("div_loading").innerHTML = html_loading;
+		var parm = "";
+		    parm += cgi_header();
+
+		top.g_xmlhttp.sendRequest(top.g_xmlhttp_url_hdr + "cgi-bin/sys_info_get.cgi" + parm, "", getSysInfoResult);
+	}
+
+	function getSysInfoResult(s, web_server_status)
+	{		
+		if ( check_web_status( web_server_status ) == -1 )
+		{
+			return;
+		}
+		
+		var info = evalJSON(s);
+		try
+		{
+		for (var key in info)
+		{
+			try
+			{
+				var str_val = info[key];
+				switch (key)
+				{
+					case "onu_conn_st":
+						str_val = onu_conn_st_arr[info[key]];
+						break;
+					case "reg_st":
+						str_val = reg_st_arr[info[key]];
+						break;
+					case "oam_link":
+						str_val = oam_link_arr[info[key]];
+						break;
+					case "auth_st":
+						str_val = auth_st_arr[info[key]];
+						break;
+					case "pon_loopback":
+						str_val = disable_arr[info[key]];
+						break;
+					case "uptime":
+						var time_arr = str_val.split(",");
+						str_val  = time_arr[0] + " " + uptime_arr[0] + " ";
+						str_val += time_arr[1] + " " + uptime_arr[1] + " ";
+						str_val += time_arr[2] + " " + uptime_arr[2] + " ";
+						str_val += time_arr[3] + " " + uptime_arr[3] + " ";
+						break;
+					case "oam_ver":
+						str_val = oam_ver_arr[info[key]];
+						break;
+					case "capabi_battery_backup":
+						str_val = battery_arr[info[key]];
+						break;
+					case "afec_ability":
+						str_val = afec_ability_arr[info[key]];
+						break;
+					case "fec_mode":
+						str_val = fec_mode_arr[info[key]];
+						break;
+					default:
+						str_val = info[key];
+				}
+				
+				$("td_" + key).innerHTML = str_val;
+			}
+			catch(E){
+			//				alert(E);
+			}
+		}
+		}
+		catch(e)
+		{
+		//		alert(e);
+		}
+		$("div_loading").innerHTML = "";
+    }
+
+</script>
+</head>
+<body style="visibility:hidden" id="page_body">
+    <blockquote>
+        <table width="580" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+                <td><strong id="in_hd">System Overview</strong></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td>
+                    <table border="0" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td><input name="bt_refresh" type="button" class="button_style" id="bt_refresh" onClick="getSysInfo();" value="Refresh"></td>
+                            <td id="div_loading"><table border="0" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td align="right"><img src="img/animated_loading.gif" width="32" height="32" id="loading"></td>
+                                        <td><strong id="txt_step">Loading .....</strong></td>
+                                    </tr>
+                            </table>
+                        </td>
+                        </tr>
+                </table>
+            </td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td id="div_table"><table cellspacing="0" cellpadding="3" border="1" style="border-collapse: collapse" bordercolor="#C0C0C0">
+                        <tbody>
+                            <tr>
+                                <td align="right" bgcolor="#EBEBEB" id="in_td_type">Type:</td>
+                                <td id="td_type">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td align="right" bgcolor="#EBEBEB" id="in_td_app_ver">Application Version: </td>
+                                <td id="td_app_ver">&nbsp;</td>
+                            </tr>          
+                            <tr>
+                                <td align="right" bgcolor="#EBEBEB" id="in_td_reg_st">Register Status: </td>
+                                <td id="td_reg_st">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td align="right" bgcolor="#EBEBEB" id="in_td_llid">LLID:</td>
+                                <td id="td_llid">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td align="right" bgcolor="#EBEBEB" id="in_td_uptime">ONU Uptime</td>
+                                <td id="td_uptime">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td align="right" bgcolor="#EBEBEB" id="in_td_onu_ip">ONU IP Address: </td>
+                                <td id="td_onu_ip">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td align="right" bgcolor="#EBEBEB" id="in_td_onu_netmask">ONU Subnet Mask:</td>
+                                <td id="td_onu_netmask">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td align="right" bgcolor="#EBEBEB" id="in_td_onu_mac">ONU MAC Address:</td>
+                                <td id="td_onu_mac">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td align="right" bgcolor="#EBEBEB" id="in_td_flash_chksum">Flash Checksum:</td>
+                                <td id="td_flash_chksum">&nbsp;</td>
+                            </tr>	
+                            <tr>
+                                <td align="right" bgcolor="#EBEBEB" id="in_td_eeprom_chksum">EEPROM Checksum:</td>
+                                <td id="td_eeprom_chksum">&nbsp;</td>
+                            </tr>	
+                            <tr>
+                                <td colspan="2" align="right">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" bgcolor="#EBEBEB"><strong id="in_onu_sn">ONU SN</strong></td>
+                            </tr>
+                            <tr>
+                                <td align="right" bgcolor="#EBEBEB" id="in_td_onu_vendor_id">Vendor ID:</td>
+                                <td id="td_onu_vendor_id">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td align="right" bgcolor="#EBEBEB" id="in_td_onu_model">ONU Model:</td>
+                                <td id="td_onu_model">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td align="right" bgcolor="#EBEBEB" id="in_td_onu_id">ONU ID:</td>
+                                <td id="td_onu_id">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td align="right" bgcolor="#EBEBEB" id="in_td_onu_hw_ver">HardwareVersion:</td>
+                                <td id="td_onu_hw_ver">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td align="right" bgcolor="#EBEBEB" id="in_td_onu_fm_ver">FirmwareVersion:</td>
+                                <td id="td_onu_fm_ver">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" align="right">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" bgcolor="#EBEBEB"><strong id="in_chip_id">Chipset ID</strong></td>
+                            </tr>
+                            <tr>
+                                <td align="right" bgcolor="#EBEBEB" id="in_td_chipset_vendor_id">Vendor ID:</td>
+                                <td id="td_chipset_vendor_id">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td align="right" bgcolor="#EBEBEB" id="in_td_chipset_chip_model">Chip Model:</td>
+                                <td id="td_chipset_chip_model">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td align="right" bgcolor="#EBEBEB" id="in_td_chipset_rev">Revision:</td>
+                                <td id="td_chipset_rev">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td align="right" bgcolor="#EBEBEB" id="in_td_chipset_ic_ver">IC Version/Date:</td>
+                                <td id="td_chipset_ic_ver">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" align="right">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" bgcolor="#EBEBEB"><strong id="in_onu_capa">ONU Capabilities</strong></td>
+                            </tr>
+                            <tr>
+                                <td align="right" bgcolor="#EBEBEB" id="in_td_capabi_service_supported">ServiceSupported:</td>
+                                <td id="td_capabi_service_supported">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td align="right" bgcolor="#EBEBEB" id="in_td_capabi_ge_num">Number of GE Ports:</td>
+                                <td id="td_capabi_ge_num">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td align="right" bgcolor="#EBEBEB" id="in_td_capabi_ge_bitmap">Bitmap of GE Ports:</td>
+                                <td id="td_capabi_ge_bitmap">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td align="right" bgcolor="#EBEBEB" id="in_td_capabi_fe_num">Number of FE Ports:</td>
+                                <td id="td_capabi_fe_num">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td align="right" bgcolor="#EBEBEB" id="in_td_capabi_fe_bitmap">Bitmap of FE Ports:</td>
+                                <td id="td_capabi_fe_bitmap">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td align="right" bgcolor="#EBEBEB" id="in_td_capabi_pots_num">Number of POTS ports:</td>
+                                <td id="td_capabi_pots_num">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td align="right" bgcolor="#EBEBEB" id="in_td_capabi_e1_num">Number of E1 port:</td>
+                                <td id="td_capabi_e1_num">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td align="right" bgcolor="#EBEBEB" id="in_td_capabi_us_que_num">Number of US Queues:</td>
+                                <td id="td_capabi_us_que_num">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td align="right" bgcolor="#EBEBEB" id="in_td_capabi_max_us_queue">QueueMax per US Port:</td>
+                                <td id="td_capabi_max_us_queue">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td align="right" bgcolor="#EBEBEB" id="in_td_capabi_ds_que_num">Number of DS Queues:</td>
+                                <td id="td_capabi_ds_que_num">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td align="right" bgcolor="#EBEBEB" id="in_td_capabi_max_ds_queue">QueueMax per DS Port:</td>
+                                <td id="td_capabi_max_ds_queue">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td align="right" bgcolor="#EBEBEB" id="in_td_capabi_battery_backup">Battery Backup:</td>
+                                <td id="td_capabi_battery_backup">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td align="right" bgcolor="#EBEBEB" id="in_td_afec_ability">FEC Ability:</td>
+                                <td id="td_afec_ability">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td align="right" bgcolor="#EBEBEB" id="in_td_fec_mode">FEC mode:</td>
+                                <td id="td_fec_mode">&nbsp;</td>
+                            </tr>
+                        </tbody>
+                </table></td>
+            </tr>
+        </table>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+    </blockquote>
+</body>
+</html>
+
